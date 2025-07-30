@@ -9,6 +9,7 @@ import Plan from '../pages/Plan'
 import SazonAuthCallback from '../pages/AuthCallback'
 import SazonResetPassword from '../pages/ResetPassword'
 import SazonSettings from '../pages/Settings'
+import SazonGroceryList from '../pages/GroceryList'
 import { hasCompletedOnboarding } from '../lib/onboardingUtils'
 
 // Development-only components
@@ -102,6 +103,18 @@ const AppRoutes: React.FC = () => {
             {!profile || !hasCompletedOnboarding(profile) ? 
               <Navigate to="/onboarding" replace /> : 
               <Plan />
+            }
+          </AuthWrapper>
+        }
+      />
+      
+      <Route
+        path="/grocery"
+        element={
+          <AuthWrapper>
+            {!profile || !hasCompletedOnboarding(profile) ? 
+              <Navigate to="/onboarding" replace /> : 
+              <SazonGroceryList />
             }
           </AuthWrapper>
         }

@@ -26,25 +26,16 @@ const SazonBottomNavbar: React.FC = () => {
             <span className="text-xs mt-1 font-medium">Plan</span>
           </Link>
 
-          {/* Grocery Button - Since there's no dedicated grocery page, this will link to the plan page with a grocery focus */}
+          {/* Grocery Button */}
           <Link
-            to="/plan"
+            to="/grocery"
             className={`flex flex-col items-center justify-center transition-all duration-200 ${
-              location.pathname === '/plan' && location.hash === '#grocery'
+              isActiveRoute('/grocery')
                 ? 'text-primary-600'
                 : 'text-gray-500 hover:text-primary-600'
             }`}
-            onClick={() => {
-              // Scroll to grocery section if on plan page
-              setTimeout(() => {
-                const grocerySection = document.getElementById('grocery-list')
-                if (grocerySection) {
-                  grocerySection.scrollIntoView({ behavior: 'smooth' })
-                }
-              }, 100)
-            }}
           >
-            <ShoppingCart className={`w-6 h-6 ${location.pathname === '/plan' && location.hash === '#grocery' ? 'text-primary-600' : 'text-gray-500'}`} />
+            <ShoppingCart className={`w-6 h-6 ${isActiveRoute('/grocery') ? 'text-primary-600' : 'text-gray-500'}`} />
             <span className="text-xs mt-1 font-medium">Grocery</span>
           </Link>
 

@@ -1,25 +1,50 @@
 import React, { useState } from 'react'
-import { CheckCircle, Circle, ShoppingCart, DollarSign, Package } from 'lucide-react'
+import { CheckCircle, Circle, ShoppingCart, Package } from 'lucide-react'
 import { SazonGroceryItem } from '../lib/api'
 
 interface SazonGroceryListSectionProps {
-  groceryItems: SazonGroceryItem[]
+  groceryItems: (SazonGroceryItem & { recipe_name?: string })[]
   onItemToggle?: (itemName: string, checked: boolean) => void
-  showCosts?: boolean
   className?: string
 }
 
 interface SazonGroceryItemWithStatus extends SazonGroceryItem {
   checked?: boolean
+  recipe_name?: string
 }
 
 const SazonGroceryListSection: React.FC<SazonGroceryListSectionProps> = ({
   groceryItems,
   onItemToggle,
-  showCosts = true,
   className = ''
 }) => {
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set())
+
+  // Generate consistent colors for recipe names
+  const getRecipeColor = (recipeName: string) => {
+    const colors = [
+      'bg-blue-100 text-blue-800',
+      'bg-green-100 text-green-800',
+      'bg-purple-100 text-purple-800',
+      'bg-orange-100 text-orange-800',
+      'bg-pink-100 text-pink-800',
+      'bg-indigo-100 text-indigo-800',
+      'bg-teal-100 text-teal-800',
+      'bg-red-100 text-red-800',
+      'bg-yellow-100 text-yellow-800',
+      'bg-cyan-100 text-cyan-800'
+    ]
+    
+    // Simple hash function to get consistent color for same recipe name
+    let hash = 0
+    for (let i = 0; i < recipeName.length; i++) {
+      const char = recipeName.charCodeAt(i)
+      hash = ((hash << 5) - hash) + char
+      hash = hash & hash // Convert to 32-bit integer
+    }
+    
+    return colors[Math.abs(hash) % colors.length]
+  }
 
   // Group items by category
   const groupedItems = groceryItems.reduce((acc, item) => {
@@ -45,7 +70,6 @@ const SazonGroceryListSection: React.FC<SazonGroceryListSectionProps> = ({
     onItemToggle?.(itemName, checked)
   }
 
-  const totalCost = groceryItems.reduce((sum, item) => sum + item.estimated_cost, 0)
   const checkedCount = checkedItems.size
   const totalCount = groceryItems.length
 
@@ -75,12 +99,6 @@ const SazonGroceryListSection: React.FC<SazonGroceryListSectionProps> = ({
             <CheckCircle className="w-4 h-4 mr-1 text-green-600" />
             <span>{checkedCount}/{totalCount} items</span>
           </div>
-          {showCosts && (
-            <div className="flex items-center">
-              <DollarSign className="w-4 h-4 mr-1" />
-              <span>${totalCost.toFixed(2)}</span>
-            </div>
-          )}
         </div>
       </div>
 
@@ -124,20 +142,19 @@ const SazonGroceryListSection: React.FC<SazonGroceryListSectionProps> = ({
                       <div className={`font-medium ${item.checked ? 'line-through text-gray-500' : 'text-gray-900'}`}>
                         {item.name}
                       </div>
-                      <div className="text-sm text-gray-500">
-                        {item.amount} {item.unit}
-                        {item.notes && ` • ${item.notes}`}
+                      <div className="flex items-center space-x-2 mt-1">
+                        <span className="text-sm text-gray-500">
+                          {item.amount} {item.unit}
+                        </span>
+                        {item.recipe_name && (
+                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${getRecipeColor(item.recipe_name)}`}>
+                            {item.recipe_name}
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
                   
-                  {showCosts && (
-                    <div className="flex items-center space-x-2 text-sm">
-                      <span className={`font-medium ${item.checked ? 'text-gray-500' : 'text-gray-900'}`}>
-                        ${item.estimated_cost.toFixed(2)}
-                      </span>
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
@@ -151,23 +168,6 @@ const SazonGroceryListSection: React.FC<SazonGroceryListSectionProps> = ({
           <Package className="w-12 h-12 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">No grocery items yet</h3>
           <p className="text-gray-500">Your grocery list will appear here once you generate a meal plan.</p>
-        </div>
-      )}
-
-      {/* Summary */}
-      {groceryItems.length > 0 && (
-        <div className="bg-primary-50 rounded-lg p-4">
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-primary-800">
-              <span className="font-medium">Total estimated cost:</span>
-            </div>
-            <div className="text-lg font-semibold text-primary-900">
-              ${totalCost.toFixed(2)}
-            </div>
-          </div>
-          <div className="mt-2 text-xs text-primary-700">
-            Prices are estimates and may vary by location and store
-          </div>
         </div>
       )}
     </div>
