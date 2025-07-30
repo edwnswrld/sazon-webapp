@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSazonUser } from '../context/UserContext'
 import { validatePassword } from '../lib/auth'
-import { User, Lock, Eye, EyeOff, CheckCircle, XCircle, ArrowLeft } from 'lucide-react'
+import { User, Lock, Eye, EyeOff, CheckCircle, XCircle, ChefHat, Users, Utensils, Globe } from 'lucide-react'
+import SazonBottomNavbar from '../components/BottomNavbar'
 
 const SazonSettings: React.FC = () => {
   const { user, profile, updateProfile, updatePassword } = useSazonUser()
@@ -91,17 +92,10 @@ const SazonSettings: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pb-20">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center text-gray-600 hover:text-gray-900 mb-4 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back
-          </button>
           <h1 className="text-3xl font-bold text-gray-900">Account Settings</h1>
           <p className="text-gray-600 mt-2">Manage your account preferences and security</p>
         </div>
@@ -109,7 +103,7 @@ const SazonSettings: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Profile Information */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
               <div className="flex items-center mb-6">
                 <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center mr-3">
                   <User className="w-5 h-5 text-primary-600" />
@@ -158,6 +152,130 @@ const SazonSettings: React.FC = () => {
                     className="input-field bg-gray-50 cursor-not-allowed"
                   />
                 </div>
+              </div>
+            </div>
+
+            {/* User Preferences Section */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div className="flex items-center mb-6">
+                <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center mr-3">
+                  <ChefHat className="w-5 h-5 text-primary-600" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-900">Your Meal Planning Preferences</h2>
+                  <p className="text-gray-600">Preferences you set during onboarding</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Dietary Preferences */}
+                <div>
+                  <div className="flex items-center mb-3">
+                    <Utensils className="w-4 h-4 text-gray-500 mr-2" />
+                    <h3 className="text-sm font-medium text-gray-700">Dietary Preferences</h3>
+                  </div>
+                  {profile?.dietary_preferences && profile.dietary_preferences.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {profile.dietary_preferences.map((preference, index) => (
+                        <span
+                          key={index}
+                          className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800"
+                        >
+                          {preference}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500">No dietary preferences set</p>
+                  )}
+                </div>
+
+                {/* Allergies */}
+                <div>
+                  <div className="flex items-center mb-3">
+                    <XCircle className="w-4 h-4 text-red-500 mr-2" />
+                    <h3 className="text-sm font-medium text-gray-700">Food Allergies</h3>
+                  </div>
+                  {profile?.allergies && profile.allergies.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {profile.allergies.map((allergy, index) => (
+                        <span
+                          key={index}
+                          className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
+                        >
+                          {allergy}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500">No allergies set</p>
+                  )}
+                </div>
+
+                {/* Household Size */}
+                <div>
+                  <div className="flex items-center mb-3">
+                    <Users className="w-4 h-4 text-gray-500 mr-2" />
+                    <h3 className="text-sm font-medium text-gray-700">Household Size</h3>
+                  </div>
+                  {profile?.household_size ? (
+                    <p className="text-sm text-gray-900">
+                      Cooking for <span className="font-medium">{profile.household_size}</span> {profile.household_size === 1 ? 'person' : 'people'}
+                    </p>
+                  ) : (
+                    <p className="text-sm text-gray-500">Not set</p>
+                  )}
+                </div>
+
+                {/* Cooking Skill Level */}
+                <div>
+                  <div className="flex items-center mb-3">
+                    <ChefHat className="w-4 h-4 text-gray-500 mr-2" />
+                    <h3 className="text-sm font-medium text-gray-700">Cooking Experience</h3>
+                  </div>
+                  {profile?.cooking_skill_level ? (
+                    <div>
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 capitalize">
+                        {profile.cooking_skill_level}
+                      </span>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {profile.cooking_skill_level === 'beginner' && 'New to cooking, need simple recipes'}
+                        {profile.cooking_skill_level === 'intermediate' && 'Some experience, can follow recipes'}
+                        {profile.cooking_skill_level === 'advanced' && 'Experienced cook, can improvise'}
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500">Not set</p>
+                  )}
+                </div>
+
+                {/* Cuisine Preferences */}
+                <div className="md:col-span-2">
+                  <div className="flex items-center mb-3">
+                    <Globe className="w-4 h-4 text-gray-500 mr-2" />
+                    <h3 className="text-sm font-medium text-gray-700">Favorite Cuisines</h3>
+                  </div>
+                  {profile?.cuisine_preferences && profile.cuisine_preferences.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {profile.cuisine_preferences.map((cuisine, index) => (
+                        <span
+                          key={index}
+                          className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
+                        >
+                          {cuisine}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500">No cuisine preferences set</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-gray-200">
+                <p className="text-xs text-gray-500">
+                  These preferences help us generate personalized meal plans. You can update them by going through onboarding again.
+                </p>
               </div>
             </div>
           </div>
@@ -296,6 +414,7 @@ const SazonSettings: React.FC = () => {
           </div>
         </div>
       </div>
+      <SazonBottomNavbar />
     </div>
   )
 }

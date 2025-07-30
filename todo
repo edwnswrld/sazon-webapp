@@ -17,7 +17,7 @@ Cursor: follow tasks in order unless instructed otherwise.
 - [x] Create `.env` files for local dev (API keys, DB URL, etc.)
 - [x] Initialize Git repository and push to GitHub (sazon-webapp)
 - [ ] Configure deployment targets:
-  - [ ] Netlify for frontend
+  - [ ] Vercel for frontend
   - [ ] Render for backend
 
 ---

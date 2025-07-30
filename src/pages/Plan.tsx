@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSazonUser } from '../context/UserContext'
-import SazonNavbar from '../components/Navbar'
+import SazonBottomNavbar from '../components/BottomNavbar'
 import SazonMealCard from '../components/MealCard'
 import SazonGroceryListSection from '../components/GroceryListSection'
 import { generateMealPlan, saveMealPlan, SazonMealPlanResponse } from '../lib/api'
@@ -104,8 +104,8 @@ const SazonPlanPage: React.FC = () => {
 
   if (showResults && mealPlan) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <SazonNavbar />
+      <div className="min-h-screen bg-gray-50 pb-20">
+        <SazonBottomNavbar />
         
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
@@ -211,7 +211,7 @@ const SazonPlanPage: React.FC = () => {
             </div>
 
             {/* Grocery List */}
-            <div>
+            <div id="grocery-list">
               <SazonGroceryListSection
                 groceryItems={mealPlan.grocery_list}
                 showCosts={true}
@@ -224,8 +224,8 @@ const SazonPlanPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <SazonNavbar />
+    <div className="min-h-screen bg-gray-50 pb-20">
+      <SazonBottomNavbar />
       
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">

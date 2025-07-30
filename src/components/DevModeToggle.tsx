@@ -28,7 +28,7 @@ export const SazonDevModeToggle: React.FC<SazonDevModeToggleProps> = ({ classNam
   }
 
   return (
-    <div className={`fixed bottom-4 right-4 z-50 ${className}`}>
+    <div className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 ${className}`}>
       <button
         onClick={handleToggle}
         className={`

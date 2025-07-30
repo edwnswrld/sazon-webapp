@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useSazonUser } from '../context/UserContext'
-import SazonNavbar from '../components/Navbar'
+import SazonBottomNavbar from '../components/BottomNavbar'
 import SazonMealCard from '../components/MealCard'
 import { 
   Plus, 
@@ -149,8 +149,8 @@ const SazonDashboardPage: React.FC = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <SazonNavbar />
+    <div className="min-h-screen bg-gray-50 pb-20">
+      <SazonBottomNavbar />
       
       <div className="container mx-auto px-4 py-8">
         {/* Welcome Section */}
@@ -280,23 +280,6 @@ const SazonDashboardPage: React.FC = () => {
               </Link>
             </div>
           )}
-        </div>
-
-        {/* Featured Recipe */}
-        <div className="bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl p-8 text-white">
-          <div className="max-w-2xl">
-            <h2 className="text-2xl font-bold mb-4">Today's Featured Recipe</h2>
-            <p className="text-primary-100 mb-6">
-              Discover new flavors and cooking techniques with our AI-curated recipes
-            </p>
-            <Link
-              to="/plan"
-              className="inline-flex items-center bg-white text-primary-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors duration-200"
-            >
-              Explore Recipes
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Link>
-          </div>
         </div>
       </div>
     </div>
