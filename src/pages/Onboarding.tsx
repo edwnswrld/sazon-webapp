@@ -1,9 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSazonUser } from '../context/UserContext'
 import { ChefHat, ArrowRight, Check, SkipForward } from 'lucide-react'
 
-const SazonOnboardingPage: React.FC = () => {
+interface SazonOnboardingPageProps {
+  isDevMode?: boolean
+  onDevComplete?: (formData: any) => void
+}
+
+const SazonOnboardingPage: React.FC<SazonOnboardingPageProps> = ({ 
+  isDevMode = false, 
+  onDevComplete 
+}) => {
   const { updateProfile } = useSazonUser()
   const navigate = useNavigate()
   const [currentStep, setCurrentStep] = useState(1)
@@ -15,15 +23,19 @@ const SazonOnboardingPage: React.FC = () => {
     allergies: [] as string[],
     household_size: 1,
     cooking_skill_level: 'beginner' as 'beginner' | 'intermediate' | 'advanced',
-    budget_preference: 'moderate' as 'budget' | 'moderate' | 'premium',
     cuisine_preferences: [] as string[]
   })
 
   // Track which steps have been completed
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set())
 
+  // Auto-scroll to top when step changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [currentStep])
+
   const dietaryOptions = [
-    'Vegetarian', 'Vegan', 'Gluten-Free', 'Dairy-Free', 'Keto', 'Paleo', 'Mediterranean', 'Low-Carb', 'High-Protein'
+    'Vegetarian', 'Vegan', 'Gluten-Free', 'Dairy-Free', 'Keto', 'Paleo', 'Mediterranean', 'Blood Sugar-Friendly', 'High-Protein'
   ]
 
   const allergyOptions = [
@@ -40,12 +52,6 @@ const SazonOnboardingPage: React.FC = () => {
     { value: 'advanced', label: 'Advanced', description: 'Experienced cook, can improvise' }
   ]
 
-  const budgetOptions = [
-    { value: 'budget', label: 'Budget-Friendly', description: 'Cost-conscious meals' },
-    { value: 'moderate', label: 'Moderate', description: 'Balanced cost and quality' },
-    { value: 'premium', label: 'Premium', description: 'High-quality ingredients' }
-  ]
-
   // Validation functions for each step
   const isStepValid = (step: number): boolean => {
     switch (step) {
@@ -57,8 +63,8 @@ const SazonOnboardingPage: React.FC = () => {
         return formData.household_size >= 1
       case 4: // Cooking skill - required
         return !!formData.cooking_skill_level
-      case 5: // Budget & cuisine - budget required, cuisine can be skipped
-        return !!formData.budget_preference
+      case 5: // Cuisine preferences - can be skipped
+        return true
       default:
         return false
     }
@@ -83,8 +89,8 @@ const SazonOnboardingPage: React.FC = () => {
   }
 
   const handleSingleSelect = (
-    fieldName: 'household_size' | 'cooking_skill_level' | 'budget_preference', 
-    value: number | 'beginner' | 'intermediate' | 'advanced' | 'budget' | 'moderate' | 'premium'
+    fieldName: 'household_size' | 'cooking_skill_level', 
+    value: number | 'beginner' | 'intermediate' | 'advanced'
   ) => {
     setFormData(prev => ({
       ...prev,
@@ -120,6 +126,14 @@ const SazonOnboardingPage: React.FC = () => {
     setError('')
 
     try {
+      if (isDevMode && onDevComplete) {
+        // In development mode, call the dev callback instead of updating profile
+        onDevComplete(formData)
+        console.log('Development mode - Onboarding completed with data:', formData)
+        // In dev mode, we don't navigate anywhere - let the parent component handle it
+        return
+      }
+
       const result = await updateProfile(formData)
       if (result.error) {
         setError(result.error.message || 'Failed to save preferences')
@@ -278,41 +292,14 @@ const SazonOnboardingPage: React.FC = () => {
         return (
           <div className="space-y-6">
             <div className="text-center">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Budget & Cuisine</h2>
-              <p className="text-gray-600">Select your budget preference and favorite cuisines</p>
-              <p className="text-sm text-gray-500 mt-1">This helps us suggest recipes that fit your budget and taste</p>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Favorite Cuisines</h2>
+              <p className="text-gray-600">Select your favorite types of cuisine</p>
+              <p className="text-sm text-gray-500 mt-1">This helps us suggest recipes that match your taste preferences</p>
             </div>
             
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Budget Preference</h3>
-                <div className="space-y-3">
-                  {budgetOptions.map(option => (
-                    <button
-                      key={option.value}
-                      onClick={() => handleSingleSelect('budget_preference', option.value as 'budget' | 'moderate' | 'premium')}
-                      className={`w-full p-4 rounded-lg border-2 text-left transition-colors duration-200 ${
-                        formData.budget_preference === option.value
-                          ? 'border-primary-500 bg-primary-50 text-primary-700'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-medium">{option.label}</div>
-                          <div className="text-sm opacity-75">{option.description}</div>
-                        </div>
-                        {formData.budget_preference === option.value && (
-                          <Check className="w-5 h-5 text-primary-600" />
-                        )}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Favorite Cuisines</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Cuisine Preferences</h3>
                 <p className="text-sm text-gray-500 mb-3">Select your favorite types of cuisine (optional)</p>
                 <div className="grid grid-cols-2 gap-3">
                   {cuisineOptions.map(option => (

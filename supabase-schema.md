@@ -24,7 +24,7 @@ CREATE TABLE user_profiles (
     allergies TEXT[] DEFAULT '{}',
     household_size INTEGER DEFAULT 1 CHECK (household_size > 0),
     cooking_skill_level TEXT CHECK (cooking_skill_level IN ('beginner', 'intermediate', 'advanced')) DEFAULT 'beginner',
-    budget_preference TEXT CHECK (budget_preference IN ('budget', 'moderate', 'premium')) DEFAULT 'moderate',
+
     cuisine_preferences TEXT[] DEFAULT '{}',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -278,7 +278,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 ```sql
 -- Create custom types for better data integrity
 CREATE TYPE cooking_skill_level AS ENUM ('beginner', 'intermediate', 'advanced');
-CREATE TYPE budget_preference AS ENUM ('budget', 'moderate', 'premium');
+
 CREATE TYPE difficulty_level AS ENUM ('easy', 'intermediate', 'hard');
 ```
 

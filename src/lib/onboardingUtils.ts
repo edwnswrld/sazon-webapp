@@ -10,7 +10,6 @@ export interface SazonUserProfile {
   allergies?: string[]
   household_size?: number
   cooking_skill_level?: 'beginner' | 'intermediate' | 'advanced'
-  budget_preference?: 'budget' | 'moderate' | 'premium'
   cuisine_preferences?: string[]
   created_at: string
   updated_at: string

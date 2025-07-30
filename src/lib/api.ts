@@ -3,7 +3,6 @@ export interface SazonMealPlanRequest {
   allergies: string[]
   household_size: number
   cooking_skill_level: 'beginner' | 'intermediate' | 'advanced'
-  budget_preference?: 'budget' | 'moderate' | 'premium'
   cuisine_preferences?: string[]
   meal_count?: number
 }

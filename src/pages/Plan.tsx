@@ -28,7 +28,6 @@ const SazonPlanPage: React.FC = () => {
 
   const [formData, setFormData] = useState({
     meal_count: 3,
-    budget_preference: profile?.budget_preference || 'moderate',
     cuisine_preferences: profile?.cuisine_preferences || [],
     additional_notes: ''
   })
@@ -48,7 +47,6 @@ const SazonPlanPage: React.FC = () => {
         allergies: profile.allergies || [],
         household_size: profile.household_size || 1,
         cooking_skill_level: profile.cooking_skill_level || 'beginner',
-        budget_preference: formData.budget_preference,
         cuisine_preferences: formData.cuisine_preferences,
         meal_count: formData.meal_count,
         additional_notes: formData.additional_notes
@@ -98,11 +96,7 @@ const SazonPlanPage: React.FC = () => {
 
   const mealCountOptions = [1, 2, 3, 4, 5, 6, 7]
 
-  const budgetOptions = [
-    { value: 'budget', label: 'Budget-Friendly', description: 'Cost-conscious meals' },
-    { value: 'moderate', label: 'Moderate', description: 'Balanced cost and quality' },
-    { value: 'premium', label: 'Premium', description: 'High-quality ingredients' }
-  ]
+
 
   const cuisineOptions = [
     'Italian', 'Mexican', 'Asian', 'Mediterranean', 'American', 'Indian', 'French', 'Thai', 'Japanese', 'Greek'
@@ -274,36 +268,6 @@ const SazonPlanPage: React.FC = () => {
                       }`}
                     >
                       <span className="text-lg font-semibold">{count}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Budget Preference */}
-              <div>
-                <label className="block text-lg font-semibold text-gray-900 mb-4">
-                  Budget Preference
-                </label>
-                <div className="space-y-3">
-                  {budgetOptions.map(option => (
-                    <button
-                      key={option.value}
-                      onClick={() => setFormData(prev => ({ ...prev, budget_preference: option.value as any }))}
-                      className={`w-full p-4 rounded-lg border-2 text-left transition-colors duration-200 ${
-                        formData.budget_preference === option.value
-                          ? 'border-primary-500 bg-primary-50 text-primary-700'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-medium">{option.label}</div>
-                          <div className="text-sm opacity-75">{option.description}</div>
-                        </div>
-                        {formData.budget_preference === option.value && (
-                          <CheckCircle className="w-5 h-5 text-primary-600" />
-                        )}
-                      </div>
                     </button>
                   ))}
                 </div>

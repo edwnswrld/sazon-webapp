@@ -32,15 +32,12 @@ export const createMockUser = (): User => ({
 export const createMockProfile = (): SazonUserProfile => ({
   id: 'dev-user-id-12345',
   email: 'dev@sazon.ai',
-  first_name: 'Dev',
-  last_name: 'User',
-  dietary_restrictions: [],
-  cuisine_preferences: ['italian', 'mexican', 'asian'],
-  spice_tolerance: 'medium',
-  cooking_skill_level: 'intermediate',
+  full_name: 'Dev User',
+  dietary_preferences: [],
+  allergies: [],
   household_size: 2,
-  budget_preference: 'moderate',
-  meal_prep_time: 30,
+  cooking_skill_level: 'intermediate',
+  cuisine_preferences: ['Italian', 'Mexican', 'Asian'],
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString()
 })

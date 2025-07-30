@@ -44,7 +44,7 @@ Create a dev-only toggle or stub user in your auth layer so you don't need to lo
   - [x] Food allergies (multiple select)
   - [x] Household size (interactive counter)
   - [x] Cooking skill level (single select)
-  - [x] Budget preference (single select)
+  
   - [x] Cuisine preferences (multiple select)
   - [x] Add form validation and skip options
   - [x] Add progress indicators and step navigation

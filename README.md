@@ -1,6 +1,6 @@
 # Sazon AI - Your Personal Meal Planning Assistant
 
-Sazon AI is a mobile-first web application that uses artificial intelligence to create personalized meal plans based on your dietary preferences, cooking skills, and budget. Say goodbye to meal planning stress and hello to delicious, customized recipes!
+Sazon AI is a mobile-first web application that uses artificial intelligence to create personalized meal plans based on your dietary preferences and cooking skills. Say goodbye to meal planning stress and hello to delicious, customized recipes!
 
 ## 🚀 Features
 

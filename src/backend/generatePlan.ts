@@ -50,7 +50,6 @@ const generatePrompt = (request: SazonMealPlanRequest): string => {
     allergies,
     household_size,
     cooking_skill_level,
-    budget_preference,
     cuisine_preferences,
     meal_count,
     additional_notes
@@ -63,7 +62,6 @@ User Preferences:
 - Food allergies: ${allergies.join(', ') || 'None'}
 - Household size: ${household_size} people
 - Cooking skill level: ${cooking_skill_level}
-- Budget preference: ${budget_preference}
 - Cuisine preferences: ${cuisine_preferences.join(', ') || 'Any cuisine'}
 - Number of meals: ${meal_count}
 - Additional notes: ${additional_notes || 'None'}
@@ -83,7 +81,6 @@ Requirements:
    - Groups items by category (Produce, Meat & Seafood, Dairy & Eggs, Pantry, etc.)
    - Includes estimated costs for each item
    - Accounts for household size
-   - Considers budget preference
 
 4. Provide:
    - Total estimated cost for all ingredients
@@ -141,7 +138,6 @@ Please respond with a valid JSON object in the following format:
 
 Ensure all recipes are:
 - Suitable for the specified cooking skill level
-- Within the budget constraints
 - Free from allergens
 - Appropriate for the dietary preferences
 - Delicious and practical for home cooking`

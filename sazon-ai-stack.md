@@ -110,7 +110,7 @@ Sazon AI follows a modern, scalable architecture designed for mobile-first web a
 - allergies (text[])
 - household_size (integer)
 - cooking_skill_level (enum)
-- budget_preference (enum)
+
 - cuisine_preferences (text[])
 - created_at (timestamp)
 - updated_at (timestamp)

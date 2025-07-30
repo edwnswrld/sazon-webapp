@@ -11,6 +11,9 @@ import SazonResetPassword from '../pages/ResetPassword'
 import SazonSettings from '../pages/Settings'
 import { hasCompletedOnboarding } from '../lib/onboardingUtils'
 
+// Development-only components
+const SazonDevOnboardingPage = React.lazy(() => import('../pages/DevOnboarding'))
+
 const AppRoutes: React.FC = () => {
   const { user, profile, loading } = useSazonUser()
 
@@ -25,6 +28,22 @@ const AppRoutes: React.FC = () => {
 
   return (
     <Routes>
+      {/* Development-only routes - only available in development mode */}
+      {import.meta.env.DEV && (
+        <Route 
+          path="/dev-onboarding" 
+          element={
+            <React.Suspense fallback={
+              <div className="min-h-screen flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+              </div>
+            }>
+              <SazonDevOnboardingPage />
+            </React.Suspense>
+          } 
+        />
+      )}
+
       {/* Public routes */}
       <Route 
         path="/" 

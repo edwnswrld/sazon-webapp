@@ -15,9 +15,8 @@ You are Sazon AI, a professional meal planning assistant with expertise in nutri
 
 1. **Nutritionally balanced** - Provide complete nutrition information
 2. **Practical** - Recipes suitable for home cooking
-3. **Budget-conscious** - Consider cost constraints
-4. **Dietary compliant** - Respect all restrictions and preferences
-5. **Skill-appropriate** - Match user's cooking experience level
+3. **Dietary compliant** - Respect all restrictions and preferences including diabetes management
+4. **Skill-appropriate** - Match user's cooking experience level
 
 Always respond with valid JSON in the exact format specified.
 ```
@@ -30,7 +29,6 @@ User Preferences:
 - Food allergies: {allergies}
 - Household size: {household_size} people
 - Cooking skill level: {cooking_skill_level}
-- Budget preference: {budget_preference}
 - Cuisine preferences: {cuisine_preferences}
 - Number of meals: {meal_count}
 - Additional notes: {additional_notes}
@@ -48,7 +46,6 @@ User Preferences:
 - Food allergies: {allergies}
 - Household size: {household_size} people
 - Cooking skill level: {cooking_skill_level}
-- Budget preference: {budget_preference}
 - Cuisine preferences: {cuisine_preferences}
 - Number of meals: {meal_count}
 - Additional notes: {additional_notes}
@@ -68,7 +65,6 @@ Requirements:
    - Groups items by category (Produce, Meat & Seafood, Dairy & Eggs, Pantry, etc.)
    - Includes estimated costs for each item
    - Accounts for household size
-   - Considers budget preference
 
 4. Provide:
    - Total estimated cost for all ingredients
@@ -126,28 +122,12 @@ Please respond with a valid JSON object in the following format:
 
 Ensure all recipes are:
 - Suitable for the specified cooking skill level
-- Within the budget constraints
 - Free from allergens
 - Appropriate for the dietary preferences
 - Delicious and practical for home cooking
 ```
 
 ## 🎨 Prompt Variations
-
-### Budget-Focused Prompt
-
-```
-Additional Budget Guidelines:
-- Budget: Focus on cost-effective ingredients and bulk cooking
-- Moderate: Balance quality and cost
-- Premium: Use high-quality, specialty ingredients
-
-Cost Considerations:
-- Use seasonal produce when possible
-- Suggest ingredient substitutions for cost savings
-- Include bulk cooking tips to reduce per-meal cost
-- Recommend store brands for non-critical ingredients
-```
 
 ### Skill-Level Specific Prompts
 
@@ -213,6 +193,25 @@ Gluten-Free Guidelines:
 - Ensure all ingredients are naturally gluten-free or certified
 ```
 
+#### Blood Sugar-Friendly (Diabetes Management)
+```
+Blood Sugar-Friendly Guidelines:
+- Focus on low glycemic index (GI) foods and complex carbohydrates
+- Prioritize high-fiber foods (vegetables, legumes, whole grains)
+- Include lean proteins with every meal to slow carbohydrate absorption
+- Limit refined carbohydrates and added sugars
+- Use healthy fats (avocado, nuts, olive oil) to improve satiety
+- Include non-starchy vegetables as the foundation of meals
+- Provide carbohydrate counting information for each recipe
+- Suggest portion control strategies and meal timing recommendations
+- Include blood sugar monitoring tips and post-meal testing guidance
+- Recommend foods rich in chromium, magnesium, and omega-3 fatty acids
+- Avoid high-sodium processed foods that can affect blood pressure
+- Include hydration recommendations and water intake guidelines
+- Provide alternative sweeteners when needed (stevia, erythritol, monk fruit)
+- Suggest meal spacing and snack timing for optimal blood sugar control
+```
+
 ## 🔧 Prompt Engineering Techniques
 
 ### Temperature Settings
@@ -234,7 +233,6 @@ Context Guidelines:
 - Keep user preferences in context throughout generation
 - Reference specific dietary restrictions in each recipe
 - Maintain consistency in cooking skill level
-- Ensure budget constraints are respected
 - Consider household size in portion calculations
 ```
 
@@ -334,7 +332,7 @@ Generate 3 quick weeknight meals (30 minutes or less) for a busy family of 4. Fo
 - One-pot or sheet pan recipes
 - Kid-friendly options
 - Leftover-friendly portions
-- Budget-friendly ingredients
+
 ```
 
 ### Special Occasion Meals
@@ -357,6 +355,24 @@ Generate 5 meals designed for weekly meal prep. Include:
 - Reheating instructions
 - Ingredient prep tips
 - Time-saving techniques
+```
+
+### Diabetes-Friendly Meal Planning
+
+```
+Create a 3-day diabetes-friendly meal plan focusing on blood sugar control. Include:
+- Low glycemic index foods and complex carbohydrates
+- Balanced macronutrients with lean proteins and healthy fats
+- High-fiber vegetables and whole grains
+- Carbohydrate counting information for each meal
+- Portion control guidelines and meal timing recommendations
+- Blood sugar monitoring tips and post-meal testing guidance
+- Hydration recommendations and water intake guidelines
+- Alternative sweeteners when needed (stevia, erythritol, monk fruit)
+- Meal spacing and snack timing for optimal blood sugar control
+- Foods rich in chromium, magnesium, and omega-3 fatty acids
+- Avoidance of high-sodium processed foods and refined sugars
+- Non-starchy vegetables as meal foundations
 ```
 
 ---
