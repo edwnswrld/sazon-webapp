@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSazonUser } from '../context/UserContext'
-import { ChefHat, ArrowRight, Check } from 'lucide-react'
+import { ChefHat, ArrowRight, Check, SkipForward } from 'lucide-react'
 
 const SazonOnboardingPage: React.FC = () => {
-  const { profile, updateProfile } = useSazonUser()
+  const { updateProfile } = useSazonUser()
   const navigate = useNavigate()
   const [currentStep, setCurrentStep] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
@@ -18,6 +18,9 @@ const SazonOnboardingPage: React.FC = () => {
     budget_preference: 'moderate' as 'budget' | 'moderate' | 'premium',
     cuisine_preferences: [] as string[]
   })
+
+  // Track which steps have been completed
+  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set())
 
   const dietaryOptions = [
     'Vegetarian', 'Vegan', 'Gluten-Free', 'Dairy-Free', 'Keto', 'Paleo', 'Mediterranean', 'Low-Carb', 'High-Protein'
@@ -43,24 +46,65 @@ const SazonOnboardingPage: React.FC = () => {
     { value: 'premium', label: 'Premium', description: 'High-quality ingredients' }
   ]
 
-  const handleToggleArray = (arrayName: keyof typeof formData, value: string) => {
+  // Validation functions for each step
+  const isStepValid = (step: number): boolean => {
+    switch (step) {
+      case 1: // Dietary preferences - can be skipped
+        return true
+      case 2: // Allergies - can be skipped
+        return true
+      case 3: // Household size - required
+        return formData.household_size >= 1
+      case 4: // Cooking skill - required
+        return !!formData.cooking_skill_level
+      case 5: // Budget & cuisine - budget required, cuisine can be skipped
+        return !!formData.budget_preference
+      default:
+        return false
+    }
+  }
+
+  const canProceedFromStep = (step: number): boolean => {
+    return isStepValid(step)
+  }
+
+  const handleToggleArray = (arrayName: 'dietary_preferences' | 'allergies' | 'cuisine_preferences', value: string) => {
     setFormData(prev => ({
       ...prev,
-      [arrayName]: prev[arrayName].includes(value)
+      [arrayName]: (prev[arrayName] as string[]).includes(value)
         ? (prev[arrayName] as string[]).filter(item => item !== value)
         : [...(prev[arrayName] as string[]), value]
     }))
+    
+    // Mark step as completed when user makes a selection
+    if (!completedSteps.has(currentStep)) {
+      setCompletedSteps(prev => new Set([...prev, currentStep]))
+    }
   }
 
-  const handleSingleSelect = (fieldName: keyof typeof formData, value: any) => {
+  const handleSingleSelect = (
+    fieldName: 'household_size' | 'cooking_skill_level' | 'budget_preference', 
+    value: number | 'beginner' | 'intermediate' | 'advanced' | 'budget' | 'moderate' | 'premium'
+  ) => {
     setFormData(prev => ({
       ...prev,
       [fieldName]: value
     }))
+    
+    // Mark step as completed when user makes a selection
+    if (!completedSteps.has(currentStep)) {
+      setCompletedSteps(prev => new Set([...prev, currentStep]))
+    }
+  }
+
+  const handleSkipStep = () => {
+    // Mark current step as completed even if skipped
+    setCompletedSteps(prev => new Set([...prev, currentStep]))
+    handleNext()
   }
 
   const handleNext = () => {
-    if (currentStep < 5) {
+    if (currentStep < 5 && canProceedFromStep(currentStep)) {
       setCurrentStep(currentStep + 1)
     }
   }
@@ -97,6 +141,7 @@ const SazonOnboardingPage: React.FC = () => {
             <div className="text-center">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Dietary Preferences</h2>
               <p className="text-gray-600">Select any dietary restrictions or preferences you follow</p>
+              <p className="text-sm text-gray-500 mt-1">This helps us suggest recipes that fit your lifestyle</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {dietaryOptions.map(option => (
@@ -118,6 +163,11 @@ const SazonOnboardingPage: React.FC = () => {
                 </button>
               ))}
             </div>
+            {formData.dietary_preferences.length === 0 && (
+              <div className="text-center text-sm text-gray-500">
+                No dietary restrictions? That's perfectly fine!
+              </div>
+            )}
           </div>
         )
 
@@ -127,6 +177,7 @@ const SazonOnboardingPage: React.FC = () => {
             <div className="text-center">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Food Allergies</h2>
               <p className="text-gray-600">Select any food allergies or intolerances</p>
+              <p className="text-sm text-gray-500 mt-1">We'll make sure to avoid these ingredients</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {allergyOptions.map(option => (
@@ -148,6 +199,11 @@ const SazonOnboardingPage: React.FC = () => {
                 </button>
               ))}
             </div>
+            {formData.allergies.length === 0 && (
+              <div className="text-center text-sm text-gray-500">
+                No allergies? Great! You have more recipe options.
+              </div>
+            )}
           </div>
         )
 
@@ -157,12 +213,13 @@ const SazonOnboardingPage: React.FC = () => {
             <div className="text-center">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Household Size</h2>
               <p className="text-gray-600">How many people are you cooking for?</p>
+              <p className="text-sm text-gray-500 mt-1">This helps us adjust recipe portions</p>
             </div>
             <div className="max-w-xs mx-auto">
               <div className="flex items-center justify-center space-x-4">
                 <button
                   onClick={() => handleSingleSelect('household_size', Math.max(1, formData.household_size - 1))}
-                  className="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-xl"
+                  className="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-xl transition-colors"
                 >
                   -
                 </button>
@@ -171,7 +228,7 @@ const SazonOnboardingPage: React.FC = () => {
                 </div>
                 <button
                   onClick={() => handleSingleSelect('household_size', formData.household_size + 1)}
-                  className="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-xl"
+                  className="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-xl transition-colors"
                 >
                   +
                 </button>
@@ -189,12 +246,13 @@ const SazonOnboardingPage: React.FC = () => {
             <div className="text-center">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Cooking Experience</h2>
               <p className="text-gray-600">What's your cooking skill level?</p>
+              <p className="text-sm text-gray-500 mt-1">This helps us suggest recipes at the right difficulty</p>
             </div>
             <div className="space-y-3">
               {skillLevels.map(level => (
                 <button
                   key={level.value}
-                  onClick={() => handleSingleSelect('cooking_skill_level', level.value)}
+                  onClick={() => handleSingleSelect('cooking_skill_level', level.value as 'beginner' | 'intermediate' | 'advanced')}
                   className={`w-full p-4 rounded-lg border-2 text-left transition-colors duration-200 ${
                     formData.cooking_skill_level === level.value
                       ? 'border-primary-500 bg-primary-50 text-primary-700'
@@ -222,6 +280,7 @@ const SazonOnboardingPage: React.FC = () => {
             <div className="text-center">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Budget & Cuisine</h2>
               <p className="text-gray-600">Select your budget preference and favorite cuisines</p>
+              <p className="text-sm text-gray-500 mt-1">This helps us suggest recipes that fit your budget and taste</p>
             </div>
             
             <div className="space-y-6">
@@ -231,7 +290,7 @@ const SazonOnboardingPage: React.FC = () => {
                   {budgetOptions.map(option => (
                     <button
                       key={option.value}
-                      onClick={() => handleSingleSelect('budget_preference', option.value)}
+                      onClick={() => handleSingleSelect('budget_preference', option.value as 'budget' | 'moderate' | 'premium')}
                       className={`w-full p-4 rounded-lg border-2 text-left transition-colors duration-200 ${
                         formData.budget_preference === option.value
                           ? 'border-primary-500 bg-primary-50 text-primary-700'
@@ -254,6 +313,7 @@ const SazonOnboardingPage: React.FC = () => {
 
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Favorite Cuisines</h3>
+                <p className="text-sm text-gray-500 mb-3">Select your favorite types of cuisine (optional)</p>
                 <div className="grid grid-cols-2 gap-3">
                   {cuisineOptions.map(option => (
                     <button
@@ -269,6 +329,11 @@ const SazonOnboardingPage: React.FC = () => {
                     </button>
                   ))}
                 </div>
+                {formData.cuisine_preferences.length === 0 && (
+                  <div className="text-center text-sm text-gray-500 mt-2">
+                    No preference? We'll suggest a variety of cuisines!
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -306,6 +371,17 @@ const SazonOnboardingPage: React.FC = () => {
                 style={{ width: `${(currentStep / 5) * 100}%` }}
               ></div>
             </div>
+            {/* Step indicators */}
+            <div className="flex justify-between mt-2">
+              {[1, 2, 3, 4, 5].map(step => (
+                <div
+                  key={step}
+                  className={`w-2 h-2 rounded-full transition-colors ${
+                    step <= currentStep ? 'bg-primary-600' : 'bg-gray-300'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
 
           {/* Form Content */}
@@ -328,30 +404,44 @@ const SazonOnboardingPage: React.FC = () => {
                 Back
               </button>
 
-              {currentStep < 5 ? (
-                <button
-                  onClick={handleNext}
-                  className="btn-primary flex items-center"
-                >
-                  Next
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </button>
-              ) : (
-                <button
-                  onClick={handleComplete}
-                  disabled={isLoading}
-                  className="btn-primary flex items-center"
-                >
-                  {isLoading ? (
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  ) : (
-                    <>
-                      Complete Setup
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </>
-                  )}
-                </button>
-              )}
+              <div className="flex items-center space-x-3">
+                {/* Skip button for optional steps */}
+                {(currentStep === 1 || currentStep === 2 || currentStep === 5) && (
+                  <button
+                    onClick={handleSkipStep}
+                    className="flex items-center text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                  >
+                    <SkipForward className="w-4 h-4 mr-1" />
+                    Skip
+                  </button>
+                )}
+
+                {currentStep < 5 ? (
+                  <button
+                    onClick={handleNext}
+                    disabled={!canProceedFromStep(currentStep)}
+                    className="btn-primary flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Next
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleComplete}
+                    disabled={isLoading || !canProceedFromStep(currentStep)}
+                    className="btn-primary flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isLoading ? (
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    ) : (
+                      <>
+                        Complete Setup
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>

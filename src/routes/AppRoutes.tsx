@@ -6,6 +6,10 @@ import Home from '../pages/Home'
 import Onboarding from '../pages/Onboarding'
 import Dashboard from '../pages/Dashboard'
 import Plan from '../pages/Plan'
+import SazonAuthCallback from '../pages/AuthCallback'
+import SazonResetPassword from '../pages/ResetPassword'
+import SazonSettings from '../pages/Settings'
+import { hasCompletedOnboarding } from '../lib/onboardingUtils'
 
 const AppRoutes: React.FC = () => {
   const { user, profile, loading } = useSazonUser()
@@ -26,19 +30,36 @@ const AppRoutes: React.FC = () => {
         path="/" 
         element={
           user ? (
-            profile ? <Navigate to="/dashboard" replace /> : <Navigate to="/onboarding" replace />
+            profile && hasCompletedOnboarding(profile) ? 
+              <Navigate to="/dashboard" replace /> : 
+              <Navigate to="/onboarding" replace />
           ) : (
             <Home />
           )
         } 
       />
       
+      {/* Auth callback routes */}
+      <Route path="/auth/callback" element={<SazonAuthCallback />} />
+      <Route path="/reset-password" element={<SazonResetPassword />} />
+      
       {/* Protected routes that require authentication */}
+      <Route
+        path="/settings"
+        element={
+          <AuthWrapper>
+            <SazonSettings />
+          </AuthWrapper>
+        }
+      />
       <Route
         path="/onboarding"
         element={
           <AuthWrapper>
-            {profile ? <Navigate to="/dashboard" replace /> : <Onboarding />}
+            {profile && hasCompletedOnboarding(profile) ? 
+              <Navigate to="/dashboard" replace /> : 
+              <Onboarding />
+            }
           </AuthWrapper>
         }
       />
@@ -47,7 +68,10 @@ const AppRoutes: React.FC = () => {
         path="/dashboard"
         element={
           <AuthWrapper>
-            {!profile ? <Navigate to="/onboarding" replace /> : <Dashboard />}
+            {!profile || !hasCompletedOnboarding(profile) ? 
+              <Navigate to="/onboarding" replace /> : 
+              <Dashboard />
+            }
           </AuthWrapper>
         }
       />
@@ -56,7 +80,10 @@ const AppRoutes: React.FC = () => {
         path="/plan"
         element={
           <AuthWrapper>
-            {!profile ? <Navigate to="/onboarding" replace /> : <Plan />}
+            {!profile || !hasCompletedOnboarding(profile) ? 
+              <Navigate to="/onboarding" replace /> : 
+              <Plan />
+            }
           </AuthWrapper>
         }
       />

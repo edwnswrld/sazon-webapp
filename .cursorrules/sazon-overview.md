@@ -89,10 +89,10 @@ Includes:
 
 ## 💸 Subscription Model
 
-- Free plan: 3-day plan, 1x/week
-- Paid plan: full weekly access, bonus features (e.g., PDF export)
-- Billing provider: Stripe or Lemon Squeezy (to be confirmed)
-- Capture emails for waitlist + conversion funnel
+- Free plan: 3-day plan, once per ip address
+- Paid plan: full weekly access
+- Billing provider: Stripe 
+- Capture emails for waitlist + conversion funnel (through supabase)
 
 ---
 

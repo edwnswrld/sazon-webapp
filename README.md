@@ -7,7 +7,6 @@ Sazon AI is a mobile-first web application that uses artificial intelligence to 
 - **AI-Powered Meal Planning**: Generate personalized meal plans using GPT-4
 - **Dietary Preferences**: Support for vegetarian, vegan, gluten-free, and other dietary restrictions
 - **Allergy Management**: Avoid ingredients you're allergic to
-- **Budget-Friendly**: Choose from budget, moderate, or premium meal plans
 - **Cooking Skill Levels**: Recipes tailored to beginner, intermediate, or advanced cooks
 - **Grocery Lists**: Automatically generated shopping lists with estimated costs
 - **Mobile-First Design**: Optimized for mobile devices with responsive design
@@ -76,6 +75,33 @@ Sazon AI is built with mobile users in mind, featuring:
 
 6. **Open your browser**
    Navigate to `http://localhost:3000`
+
+## 🛠️ Development Mode
+
+For faster development, Sazon AI includes a dev bypass auth mode that allows you to skip the authentication process:
+
+### Enabling Dev Mode
+
+1. **Toggle Dev Mode**: Click the "⚪ Dev Mode OFF" button in the bottom-right corner of the app
+2. **Automatic Login**: Once enabled, you'll be automatically logged in as a mock user
+3. **Visual Indicator**: The navbar will show "🟢 Dev Mode" when active
+4. **Persistent**: Dev mode state is saved in localStorage and persists across page reloads
+
+### Dev Mode Features
+
+- **Mock User**: Automatically logged in as `dev@sazon.ai`
+- **Mock Profile**: Pre-filled user preferences for testing
+- **Skip Authentication**: No need to sign up or sign in
+- **Local State**: Profile updates are stored locally (not in database)
+- **Easy Toggle**: One-click enable/disable
+
+### Disabling Dev Mode
+
+- Click the "🟢 Dev Mode ON" button to disable
+- The page will reload and return to normal authentication flow
+- All dev mode data is cleared from localStorage
+
+**Note**: Dev mode is only available in development builds (`import.meta.env.PROD === false`). It's automatically disabled in production builds.
 
 ## 📁 Project Structure
 
@@ -192,12 +218,6 @@ If you encounter any issues or have questions:
 2. Set up environment variables in Vercel dashboard
 3. Deploy automatically on push to main branch
 
-### Netlify
-
-1. Connect your repository to Netlify
-2. Set build command: `npm run build`
-3. Set publish directory: `dist`
-4. Configure environment variables
 
 ### Other Platforms
 

@@ -2,35 +2,44 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSazonUser } from '../context/UserContext'
 import { validateEmail, validatePassword } from '../lib/auth'
-import { ChefHat, Sparkles, Clock, Users, DollarSign } from 'lucide-react'
+import { ChefHat, Sparkles, Clock, Users, Mail, Lock, User, LogIn } from 'lucide-react'
 
 const SazonHomePage: React.FC = () => {
-  const { signIn, signUp } = useSazonUser()
+  const { signIn, signUp, signInWithMagicLink, signUpWithMagicLink } = useSazonUser()
   const navigate = useNavigate()
   const [isSignUp, setIsSignUp] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
   
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    fullName: ''
+    firstName: ''
   })
 
   const [validationErrors, setValidationErrors] = useState({
     email: '',
     password: '',
-    fullName: ''
+    firstName: ''
   })
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
     setValidationErrors(prev => ({ ...prev, [field]: '' }))
     setError('')
+    setSuccessMessage('')
+  }
+
+  const handleSignInSignUpToggle = (isSignUpMode: boolean) => {
+    setIsSignUp(isSignUpMode)
+    setError('')
+    setSuccessMessage('')
+    setValidationErrors({ email: '', password: '', firstName: '' })
   }
 
   const validateForm = () => {
-    const errors = { email: '', password: '', fullName: '' }
+    const errors = { email: '', password: '', firstName: '' }
     let isValid = true
 
     // Email validation
@@ -42,7 +51,7 @@ const SazonHomePage: React.FC = () => {
       isValid = false
     }
 
-    // Password validation
+    // Password validation (only for password-based auth)
     if (!formData.password) {
       errors.password = 'Password is required'
       isValid = false
@@ -54,9 +63,9 @@ const SazonHomePage: React.FC = () => {
       }
     }
 
-    // Full name validation (only for sign up)
-    if (isSignUp && !formData.fullName.trim()) {
-      errors.fullName = 'Full name is required'
+    // First name validation (only for sign up)
+    if (isSignUp && !formData.firstName.trim()) {
+      errors.firstName = 'First name is required'
       isValid = false
     }
 
@@ -71,11 +80,13 @@ const SazonHomePage: React.FC = () => {
 
     setIsLoading(true)
     setError('')
+    setSuccessMessage('')
 
     try {
       let result
+      
       if (isSignUp) {
-        result = await signUp(formData.email, formData.password, formData.fullName)
+        result = await signUp(formData.email, formData.password, formData.firstName)
       } else {
         result = await signIn(formData.email, formData.password)
       }
@@ -85,6 +96,36 @@ const SazonHomePage: React.FC = () => {
       } else {
         // Success - navigation will be handled by the router
         navigate('/onboarding')
+      }
+    } catch (err) {
+      setError('An unexpected error occurred')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleMagicLinkSignIn = async () => {
+    if (!formData.email) {
+      setError('Email is required for magic link sign in')
+      return
+    }
+
+    if (!validateEmail(formData.email)) {
+      setError('Please enter a valid email address')
+      return
+    }
+
+    setIsLoading(true)
+    setError('')
+    setSuccessMessage('')
+
+    try {
+      const result = await signInWithMagicLink(formData.email)
+      
+      if (result.error) {
+        setError(result.error.message || 'An error occurred')
+      } else {
+        setSuccessMessage('Check your email for a magic link to sign in!')
       }
     } catch (err) {
       setError('An unexpected error occurred')
@@ -108,61 +149,86 @@ const SazonHomePage: React.FC = () => {
       icon: <Users className="w-6 h-6" />,
       title: 'Family-Friendly',
       description: 'Meal plans that work for your entire household'
-    },
-    {
-      icon: <DollarSign className="w-6 h-6" />,
-      title: 'Budget-Conscious',
-      description: 'Cost-effective meal plans that won\'t break the bank'
     }
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50">
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 above-fold">
       {/* Header */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-12">
-          <div className="flex justify-center mb-6">
+      <div className="container mx-auto px-4 py-6">
+        <div className="text-center mb-8">
+          <div className="flex justify-center mb-4">
             <div className="w-16 h-16 bg-primary-600 rounded-2xl flex items-center justify-center">
               <ChefHat className="w-8 h-8 text-white" />
             </div>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
             Welcome to <span className="text-primary-600">Sazon AI</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Your personal AI chef that creates delicious, personalized meal plans just for you
           </p>
         </div>
 
-        <div className="max-w-md mx-auto">
+        <div className="max-w-md mx-auto auth-form-container">
           {/* Auth Form */}
-          <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+          <div className="bg-white rounded-2xl shadow-xl p-6 mb-8">
+            {/* Sign In/Sign Up Toggle */}
+            <div className="flex items-center justify-center mb-4">
+              <div className="bg-gray-100 rounded-lg p-1 flex">
+                <button
+                  type="button"
+                  onClick={() => handleSignInSignUpToggle(false)}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center ${
+                    !isSignUp
+                      ? 'bg-white text-primary-600 shadow-sm'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  <LogIn className="mr-2 h-4 w-4" />
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSignInSignUpToggle(true)}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center ${
+                    isSignUp
+                      ? 'bg-white text-primary-600 shadow-sm'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  <User className="mr-2 h-4 w-4" />
+                  Sign Up
+                </button>
+              </div>
+            </div>
+
+            <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">
               {isSignUp ? 'Create Account' : 'Sign In'}
             </h2>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-4">
               {isSignUp && (
                 <div>
-                  <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
-                    Full Name
+                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+                    First Name
                   </label>
                   <input
                     type="text"
-                    id="fullName"
-                    value={formData.fullName}
-                    onChange={(e) => handleInputChange('fullName', e.target.value)}
-                    className={`input-field ${validationErrors.fullName ? 'border-red-500' : ''}`}
-                    placeholder="Enter your full name"
+                    id="firstName"
+                    value={formData.firstName}
+                    onChange={(e) => handleInputChange('firstName', e.target.value)}
+                    className={`input-field ${validationErrors.firstName ? 'border-red-500' : ''}`}
+                    placeholder="Enter your first name"
                   />
-                  {validationErrors.fullName && (
-                    <p className="mt-1 text-sm text-red-600">{validationErrors.fullName}</p>
+                  {validationErrors.firstName && (
+                    <p className="mt-1 text-sm text-red-600">{validationErrors.firstName}</p>
                   )}
                 </div>
               )}
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                   Email
                 </label>
                 <input
@@ -179,7 +245,7 @@ const SazonHomePage: React.FC = () => {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                   Password
                 </label>
                 <input
@@ -196,8 +262,14 @@ const SazonHomePage: React.FC = () => {
               </div>
 
               {error && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-2">
                   <p className="text-sm text-red-600">{error}</p>
+                </div>
+              )}
+
+              {successMessage && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-2">
+                  <p className="text-sm text-green-600">{successMessage}</p>
                 </div>
               )}
 
@@ -212,21 +284,38 @@ const SazonHomePage: React.FC = () => {
                   isSignUp ? 'Create Account' : 'Sign In'
                 )}
               </button>
-            </form>
 
-            <div className="mt-6 text-center">
-              <button
-                onClick={() => setIsSignUp(!isSignUp)}
-                className="text-primary-600 hover:text-primary-700 text-sm font-medium"
-              >
-                {isSignUp ? 'Already have an account? Sign in' : 'Don\'t have an account? Sign up'}
-              </button>
-            </div>
+              {/* Magic Link button - only show for Sign In */}
+              {!isSignUp && (
+                <button
+                  type="button"
+                  onClick={handleMagicLinkSignIn}
+                  disabled={isLoading}
+                  className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  <Mail className="mr-2 h-4 w-4" />
+                  Magic Link
+                </button>
+              )}
+
+              {/* Forgot Password link - only show for Sign In */}
+              {!isSignUp && (
+                <div className="text-center">
+                  <button
+                    type="button"
+                    onClick={() => navigate('/reset-password')}
+                    className="text-sm text-primary-600 hover:text-primary-700 transition-colors"
+                  >
+                    Forgot your password?
+                  </button>
+                </div>
+              )}
+            </form>
           </div>
         </div>
 
-        {/* Features */}
-        <div className="max-w-4xl mx-auto">
+        {/* Features - moved below with proper spacing */}
+        <div className="max-w-4xl mx-auto mt-16">
           <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">
             Why Choose Sazon AI?
           </h3>

@@ -24,22 +24,31 @@ Cursor: follow tasks in order unless instructed otherwise.
 
 ## 2️⃣ Set Up Auth Flow
 
-- [ ] Create email login flow with magic link
-  - [ ] Use Supabase, Clerk, or custom backend
-- [ ] Build simple login UI (email only)
-- [ ] Handle logged-in and logged-out states
-- [ ] Set up protected routes
-
+- [x] Create email login flow with magic link
+  - [x] Use Supabase
+- [x] Set up Dev "bypass" auth mode
+Create a dev-only toggle or stub user in your auth layer so you don't need to login every time
+- [x] Build simple login UI (email only)
+- [x] Handle logged-in and logged-out states
+- [x] Set up protected routes
+- [x] Add password reset functionality
+- [x] Add auth callback handling
+- [x] Create settings page for password management
+- [x] once user signs up direct to onboarding
 ---
 
 ## 3️⃣ Create User Onboarding / Preferences Form
 
-- [ ] Build onboarding form:
-  - [ ] First name
-  - [ ] Preferred cuisine
-  - [ ] Dietary restrictions
-  - [ ] Allergies
-- [ ] Store user preferences in database
+- [x] Build onboarding form:
+  - [x] Dietary preferences (multiple select)
+  - [x] Food allergies (multiple select)
+  - [x] Household size (interactive counter)
+  - [x] Cooking skill level (single select)
+  - [x] Budget preference (single select)
+  - [x] Cuisine preferences (multiple select)
+  - [x] Add form validation and skip options
+  - [x] Add progress indicators and step navigation
+- [x] Store user preferences in database
 - [ ] Pre-fill values on profile/settings page
 
 ---

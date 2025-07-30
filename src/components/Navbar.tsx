@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useSazonUser } from '../context/UserContext'
 import { Menu, X, User, LogOut, Settings } from 'lucide-react'
+import { isDevModeEnabled } from '../lib/devAuth'
 
 const SazonNavbar: React.FC = () => {
   const { user, signOut } = useSazonUser()
@@ -74,6 +75,11 @@ const SazonNavbar: React.FC = () => {
               >
                 Meal Plans
               </Link>
+              {isDevModeEnabled() && (
+                <div className="px-3 py-2 rounded-md text-sm font-medium bg-green-100 text-green-800">
+                  🟢 Dev Mode
+                </div>
+              )}
             </div>
           </div>
 
@@ -160,6 +166,11 @@ const SazonNavbar: React.FC = () => {
             >
               Meal Plans
             </Link>
+            {isDevModeEnabled() && (
+              <div className="px-3 py-2 rounded-md text-base font-medium bg-green-100 text-green-800">
+                🟢 Dev Mode Active
+              </div>
+            )}
             <div className="border-t border-gray-200 pt-4">
               <div className="px-3 py-2 text-sm text-gray-500">
                 {user.email}

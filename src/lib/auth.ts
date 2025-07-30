@@ -57,14 +57,14 @@ export const signInWithEmail = async (email: string, password: string) => {
   }
 }
 
-export const signUpWithEmail = async (email: string, password: string, fullName: string) => {
+export const signUpWithEmail = async (email: string, password: string, firstName: string) => {
   try {
     const { data, error } = await supabaseClient.auth.signUp({
       email,
       password,
       options: {
         data: {
-          full_name: fullName,
+          full_name: firstName,
         },
       },
     })
@@ -137,6 +137,99 @@ export const getCurrentUser = async () => {
     return { 
       error: { 
         message: 'An unexpected error occurred while getting user',
+        code: 'UNKNOWN_ERROR'
+      }
+    }
+  }
+} 
+
+export const signInWithMagicLink = async (email: string) => {
+  try {
+    const { error } = await supabaseClient.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
+    })
+    
+    if (error) {
+      return { error: { message: error.message, code: error.name } }
+    }
+    
+    return { error: null }
+  } catch (error) {
+    return { 
+      error: { 
+        message: 'An unexpected error occurred while sending magic link',
+        code: 'UNKNOWN_ERROR'
+      }
+    }
+  }
+}
+
+export const requestPasswordReset = async (email: string) => {
+  try {
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    })
+    
+    if (error) {
+      return { error: { message: error.message, code: error.name } }
+    }
+    
+    return { error: null }
+  } catch (error) {
+    return { 
+      error: { 
+        message: 'An unexpected error occurred while sending password reset email',
+        code: 'UNKNOWN_ERROR'
+      }
+    }
+  }
+}
+
+export const updateUserPassword = async (password: string) => {
+  try {
+    const { error } = await supabaseClient.auth.updateUser({
+      password: password
+    })
+    
+    if (error) {
+      return { error: { message: error.message, code: error.name } }
+    }
+    
+    return { error: null }
+  } catch (error) {
+    return { 
+      error: { 
+        message: 'An unexpected error occurred while updating password',
+        code: 'UNKNOWN_ERROR'
+      }
+    }
+  }
+}
+
+export const signUpWithMagicLink = async (email: string, firstName: string) => {
+  try {
+    const { error } = await supabaseClient.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        data: {
+          full_name: firstName,
+        },
+      },
+    })
+    
+    if (error) {
+      return { error: { message: error.message, code: error.name } }
+    }
+    
+    return { error: null }
+  } catch (error) {
+    return { 
+      error: { 
+        message: 'An unexpected error occurred while sending magic link',
         code: 'UNKNOWN_ERROR'
       }
     }
