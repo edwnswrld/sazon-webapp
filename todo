@@ -8,13 +8,14 @@ Cursor: follow tasks in order unless instructed otherwise.
 
 ## 1️⃣ Set Up Project Environment
 
-- [ x] Initialize Vite + React + TypeScript project
-- [x ] Install Tailwind CSS and configure
-- [x ] Set up React Router DOM
-- [x ] Install and configure Radix UI, Lucide React
-- [ x] Install and configure React Hook Form + Zod
-- [ x] Install and configure React Query
-- [ x] Create `.env` files for local dev (API keys, DB URL, etc.)
+- [x] Initialize Vite + React + TypeScript project
+- [x] Install Tailwind CSS and configure
+- [x] Set up React Router DOM
+- [x] Install and configure Radix UI, Lucide React
+- [x] Install and configure React Hook Form + Zod
+- [x] Install and configure React Query
+- [x] Create `.env` files for local dev (API keys, DB URL, etc.)
+- [x] Initialize Git repository and push to GitHub (sazon-webapp)
 - [ ] Configure deployment targets:
   - [ ] Netlify for frontend
   - [ ] Render for backend
