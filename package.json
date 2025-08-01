@@ -1,0 +1,57 @@
+{
+  "name": "sazon-mvp",
+  "version": "1.0.0",
+  "description": "Sazón AI - Meal Planning MVP",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "cd backend && npm run build",
+    "lint": "npm run lint:backend && npm run lint:frontend",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:backend": "cd backend && npm run lint",
+    "lint:fix": "npm run lint:fix:backend && npm run lint:fix:frontend",
+    "lint:fix:frontend": "cd frontend && npm run lint:fix",
+    "lint:fix:backend": "cd backend && npm run lint:fix",
+    "type-check": "npm run type-check:backend && npm run type-check:frontend",
+    "type-check:frontend": "cd frontend && npm run type-check",
+    "type-check:backend": "cd backend && npm run type-check",
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:frontend": "cd frontend && npm run test",
+    "test:backend": "cd backend && npm run test",
+    "test:coverage": "npm run test:coverage:backend && npm run test:coverage:frontend",
+    "test:coverage:frontend": "cd frontend && npm run test:coverage",
+    "test:coverage:backend": "cd backend && npm run test:coverage",
+    "test:watch": "concurrently \"npm run test:watch:backend\" \"npm run test:watch:frontend\"",
+    "test:watch:frontend": "cd frontend && npm run test:watch",
+    "test:watch:backend": "cd backend && npm run test:watch",
+    "qa:check": "npm run lint && npm run type-check && npm run test:coverage",
+    "qa:security": "npm run qa:security:backend && npm run qa:security:frontend",
+    "qa:security:frontend": "cd frontend && npm run qa:security",
+    "qa:security:backend": "cd backend && npm run qa:security",
+    "qa:performance": "npm run qa:performance:backend && npm run qa:performance:frontend",
+    "qa:performance:frontend": "cd frontend && npm run qa:performance",
+    "qa:performance:backend": "cd backend && npm run qa:performance",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "clean": "npm run clean:frontend && npm run clean:backend",
+    "clean:frontend": "cd frontend && rm -rf node_modules dist coverage",
+    "clean:backend": "cd backend && rm -rf node_modules dist coverage",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "prettier": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+} 

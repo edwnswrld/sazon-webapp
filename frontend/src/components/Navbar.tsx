@@ -29,7 +29,7 @@ const SazonNavbar: React.FC = () => {
   }
 
   const isActiveRoute = (path: string) => {
-    return location.pathname === path
+    return location.pathname === path || location.pathname === `/app${path}`
   }
 
   if (!user) {
@@ -42,7 +42,7 @@ const SazonNavbar: React.FC = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link to="/dashboard" className="flex items-center" onClick={closeMenus}>
+            <Link to="/app/dashboard" className="flex items-center" onClick={closeMenus}>
               <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">S</span>
               </div>
@@ -54,7 +54,7 @@ const SazonNavbar: React.FC = () => {
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
               <Link
-                to="/dashboard"
+                to="/app/dashboard"
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                   isActiveRoute('/dashboard')
                     ? 'text-primary-600 bg-primary-50'
@@ -65,7 +65,7 @@ const SazonNavbar: React.FC = () => {
                 Dashboard
               </Link>
               <Link
-                to="/plan"
+                to="/app/plan"
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                   isActiveRoute('/plan')
                     ? 'text-primary-600 bg-primary-50'
@@ -103,7 +103,7 @@ const SazonNavbar: React.FC = () => {
                         {user.email}
                       </div>
                       <Link
-                        to="/settings"
+                        to="/app/settings"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
                         onClick={closeMenus}
                       >
@@ -145,7 +145,7 @@ const SazonNavbar: React.FC = () => {
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
             <Link
-              to="/dashboard"
+              to="/app/dashboard"
               className={`block px-3 py-2 rounded-md text-base font-medium ${
                 isActiveRoute('/dashboard')
                   ? 'text-primary-600 bg-primary-50'
@@ -156,7 +156,7 @@ const SazonNavbar: React.FC = () => {
               Dashboard
             </Link>
             <Link
-              to="/plan"
+              to="/app/plan"
               className={`block px-3 py-2 rounded-md text-base font-medium ${
                 isActiveRoute('/plan')
                   ? 'text-primary-600 bg-primary-50'
@@ -176,7 +176,7 @@ const SazonNavbar: React.FC = () => {
                 {user.email}
               </div>
               <Link
-                to="/settings"
+                to="/app/settings"
                 className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 flex items-center"
                 onClick={closeMenus}
               >

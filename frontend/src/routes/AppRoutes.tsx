@@ -2,6 +2,7 @@ import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useSazonUser } from '../context/UserContext'
 import AuthWrapper from '../components/AuthWrapper'
+import AppLayout from '../components/AppLayout'
 import Home from '../pages/Home'
 import Onboarding from '../pages/Onboarding'
 import Dashboard from '../pages/Dashboard'
@@ -10,7 +11,9 @@ import SazonAuthCallback from '../pages/AuthCallback'
 import SazonResetPassword from '../pages/ResetPassword'
 import SazonSettings from '../pages/Settings'
 import SazonGroceryList from '../pages/GroceryList'
+import { LandingPage } from '../pages/landing/LandingPage'
 import { hasCompletedOnboarding } from '../lib/onboardingUtils'
+import { MockDesignsPreview } from '../components/MockDesignsPreview'
 
 // Development-only components
 const SazonDevOnboardingPage = React.lazy(() => import('../pages/DevOnboarding'))
@@ -31,18 +34,24 @@ const AppRoutes: React.FC = () => {
     <Routes>
       {/* Development-only routes - only available in development mode */}
       {import.meta.env.DEV && (
-        <Route 
-          path="/dev-onboarding" 
-          element={
-            <React.Suspense fallback={
-              <div className="min-h-screen flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-              </div>
-            }>
-              <SazonDevOnboardingPage />
-            </React.Suspense>
-          } 
-        />
+        <>
+          <Route 
+            path="/dev-onboarding" 
+            element={
+              <React.Suspense fallback={
+                <div className="min-h-screen flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+                </div>
+              }>
+                <SazonDevOnboardingPage />
+              </React.Suspense>
+            } 
+          />
+          <Route 
+            path="/mock-designs" 
+            element={<MockDesignsPreview />} 
+          />
+        </>
       )}
 
       {/* Public routes */}
@@ -51,74 +60,93 @@ const AppRoutes: React.FC = () => {
         element={
           user ? (
             profile && hasCompletedOnboarding(profile) ? 
-              <Navigate to="/dashboard" replace /> : 
-              <Navigate to="/onboarding" replace />
+              <Navigate to="/app/dashboard" replace /> : 
+              <Navigate to="/app/onboarding" replace />
           ) : (
-            <Home />
+            <LandingPage />
           )
         } 
       />
+      
+      {/* Landing page route */}
+      <Route path="/landing" element={<LandingPage />} />
       
       {/* Auth callback routes */}
       <Route path="/auth/callback" element={<SazonAuthCallback />} />
       <Route path="/reset-password" element={<SazonResetPassword />} />
       
-      {/* Protected routes that require authentication */}
+      {/* App routes - all authenticated routes under /app */}
       <Route
-        path="/settings"
+        path="/app"
         element={
           <AuthWrapper>
-            <SazonSettings />
+            <AppLayout />
           </AuthWrapper>
         }
-      />
-      <Route
-        path="/onboarding"
-        element={
-          <AuthWrapper>
-            {profile && hasCompletedOnboarding(profile) ? 
-              <Navigate to="/dashboard" replace /> : 
+      >
+        {/* Redirect /app to dashboard if onboarding is complete */}
+        <Route
+          index
+          element={
+            profile && hasCompletedOnboarding(profile) ? 
+              <Navigate to="/app/dashboard" replace /> : 
+              <Navigate to="/app/onboarding" replace />
+          }
+        />
+        
+        {/* Onboarding route */}
+        <Route
+          path="onboarding"
+          element={
+            profile && hasCompletedOnboarding(profile) ? 
+              <Navigate to="/app/dashboard" replace /> : 
               <Onboarding />
-            }
-          </AuthWrapper>
-        }
-      />
-      
-      <Route
-        path="/dashboard"
-        element={
-          <AuthWrapper>
-            {!profile || !hasCompletedOnboarding(profile) ? 
-              <Navigate to="/onboarding" replace /> : 
+          }
+        />
+        
+        {/* Dashboard route */}
+        <Route
+          path="dashboard"
+          element={
+            !profile || !hasCompletedOnboarding(profile) ? 
+              <Navigate to="/app/onboarding" replace /> : 
               <Dashboard />
-            }
-          </AuthWrapper>
-        }
-      />
-      
-      <Route
-        path="/plan"
-        element={
-          <AuthWrapper>
-            {!profile || !hasCompletedOnboarding(profile) ? 
-              <Navigate to="/onboarding" replace /> : 
+          }
+        />
+        
+        {/* Plan route */}
+        <Route
+          path="plan"
+          element={
+            !profile || !hasCompletedOnboarding(profile) ? 
+              <Navigate to="/app/onboarding" replace /> : 
               <Plan />
-            }
-          </AuthWrapper>
-        }
-      />
-      
-      <Route
-        path="/grocery"
-        element={
-          <AuthWrapper>
-            {!profile || !hasCompletedOnboarding(profile) ? 
-              <Navigate to="/onboarding" replace /> : 
+          }
+        />
+        
+        {/* Grocery list route */}
+        <Route
+          path="grocery"
+          element={
+            !profile || !hasCompletedOnboarding(profile) ? 
+              <Navigate to="/app/onboarding" replace /> : 
               <SazonGroceryList />
-            }
-          </AuthWrapper>
-        }
-      />
+          }
+        />
+        
+        {/* Settings route */}
+        <Route
+          path="settings"
+          element={<SazonSettings />}
+        />
+      </Route>
+      
+      {/* Legacy routes - redirect to /app for backward compatibility */}
+      <Route path="/dashboard" element={<Navigate to="/app/dashboard" replace />} />
+      <Route path="/plan" element={<Navigate to="/app/plan" replace />} />
+      <Route path="/grocery" element={<Navigate to="/app/grocery" replace />} />
+      <Route path="/settings" element={<Navigate to="/app/settings" replace />} />
+      <Route path="/onboarding" element={<Navigate to="/app/onboarding" replace />} />
       
       {/* Catch all route - redirect to home */}
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -6,7 +6,7 @@ const SazonBottomNavbar: React.FC = () => {
   const location = useLocation()
 
   const isActiveRoute = (path: string) => {
-    return location.pathname === path
+    return location.pathname === path || location.pathname === `/app${path}`
   }
 
   return (
@@ -15,7 +15,7 @@ const SazonBottomNavbar: React.FC = () => {
         <div className="flex items-center space-x-8">
           {/* Plan Button */}
           <Link
-            to="/plan"
+            to="/app/plan"
             className={`flex flex-col items-center justify-center transition-all duration-200 ${
               isActiveRoute('/plan')
                 ? 'text-primary-600'
@@ -28,7 +28,7 @@ const SazonBottomNavbar: React.FC = () => {
 
           {/* Grocery Button */}
           <Link
-            to="/grocery"
+            to="/app/grocery"
             className={`flex flex-col items-center justify-center transition-all duration-200 ${
               isActiveRoute('/grocery')
                 ? 'text-primary-600'
@@ -41,7 +41,7 @@ const SazonBottomNavbar: React.FC = () => {
 
           {/* Account Settings Button */}
           <Link
-            to="/settings"
+            to="/app/settings"
             className={`flex flex-col items-center justify-center transition-all duration-200 ${
               isActiveRoute('/settings')
                 ? 'text-primary-600'
