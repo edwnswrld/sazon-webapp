@@ -1,3 +1,16 @@
+import { supabaseClient } from './supabaseClient'
+
+// Helper function to get the current session token
+const getAuthToken = async (): Promise<string | null> => {
+  try {
+    const { data: { session } } = await supabaseClient.auth.getSession()
+    return session?.access_token || null
+  } catch (error) {
+    console.error('Error getting auth token:', error)
+    return null
+  }
+}
+
 export interface SazonMealPlanRequest {
   dietary_preferences: string[]
   allergies: string[]
@@ -63,11 +76,24 @@ export const generateMealPlan = async (
   request: SazonMealPlanRequest
 ): Promise<{ data: SazonMealPlanResponse | null; error: SazonApiError | null }> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/generate-plan`, {
+    const authToken = await getAuthToken()
+    
+    if (!authToken) {
+      return {
+        data: null,
+        error: {
+          message: 'Authentication required',
+          code: 'AUTH_REQUIRED',
+          details: 'No valid authentication token found'
+        }
+      }
+    }
+
+    const response = await fetch(`${API_BASE_URL}/meal-plan/generate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('sazon_auth_token')}`,
+        'Authorization': `Bearer ${authToken}`,
       },
       body: JSON.stringify(request),
     })
@@ -103,11 +129,24 @@ export const saveMealPlan = async (
   userId: string
 ): Promise<{ data: any | null; error: SazonApiError | null }> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/save-plan`, {
+    const authToken = await getAuthToken()
+    
+    if (!authToken) {
+      return {
+        data: null,
+        error: {
+          message: 'Authentication required',
+          code: 'AUTH_REQUIRED',
+          details: 'No valid authentication token found'
+        }
+      }
+    }
+
+    const response = await fetch(`${API_BASE_URL}/meal-plan/save`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('sazon_auth_token')}`,
+        'Authorization': `Bearer ${authToken}`,
       },
       body: JSON.stringify({
         meal_plan: mealPlan,
@@ -146,10 +185,23 @@ export const getSavedMealPlans = async (
   userId: string
 ): Promise<{ data: SazonMealPlanResponse[] | null; error: SazonApiError | null }> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/saved-plans?user_id=${userId}`, {
+    const authToken = await getAuthToken()
+    
+    if (!authToken) {
+      return {
+        data: null,
+        error: {
+          message: 'Authentication required',
+          code: 'AUTH_REQUIRED',
+          details: 'No valid authentication token found'
+        }
+      }
+    }
+
+    const response = await fetch(`${API_BASE_URL}/meal-plan/saved?user_id=${userId}`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('sazon_auth_token')}`,
+        'Authorization': `Bearer ${authToken}`,
       },
     })
 
@@ -184,11 +236,24 @@ export const updateMealPlanPreferences = async (
   preferences: Partial<SazonMealPlanRequest>
 ): Promise<{ data: any | null; error: SazonApiError | null }> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/update-preferences`, {
+    const authToken = await getAuthToken()
+    
+    if (!authToken) {
+      return {
+        data: null,
+        error: {
+          message: 'Authentication required',
+          code: 'AUTH_REQUIRED',
+          details: 'No valid authentication token found'
+        }
+      }
+    }
+
+    const response = await fetch(`${API_BASE_URL}/meal-plan/preferences`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('sazon_auth_token')}`,
+        'Authorization': `Bearer ${authToken}`,
       },
       body: JSON.stringify({
         user_id: userId,
@@ -215,6 +280,57 @@ export const updateMealPlanPreferences = async (
       data: null,
       error: {
         message: 'Network error occurred while updating preferences',
+        code: 'NETWORK_ERROR',
+        details: error,
+      },
+    }
+  }
+} 
+
+/**
+ * Generates a mock meal plan for development and testing purposes
+ * This endpoint uses optional authentication (works with or without auth token)
+ */
+export const generateMockMealPlan = async (
+  request: SazonMealPlanRequest
+): Promise<{ data: SazonMealPlanResponse | null; error: SazonApiError | null }> => {
+  try {
+    const authToken = await getAuthToken()
+    
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    }
+    
+    // Add auth token if available (optional for mock endpoint)
+    if (authToken) {
+      headers['Authorization'] = `Bearer ${authToken}`
+    }
+
+    const response = await fetch(`${API_BASE_URL}/meal-plan/mock`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(request),
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}))
+      return {
+        data: null,
+        error: {
+          message: errorData.message || 'Failed to generate mock meal plan',
+          code: errorData.code || 'MOCK_GENERATION_FAILED',
+          details: errorData.details,
+        },
+      }
+    }
+
+    const data = await response.json()
+    return { data, error: null }
+  } catch (error) {
+    return {
+      data: null,
+      error: {
+        message: 'Network error occurred while generating mock meal plan',
         code: 'NETWORK_ERROR',
         details: error,
       },

@@ -1,0 +1,431 @@
+# ✅ Sazón MVP – To-Do List
+
+This is the comprehensive development roadmap for building the **Sazón culturally aware meal planning web app**. Tasks are organized by frontend/backend and development phase.
+
+Cursor: follow tasks in order unless instructed otherwise.
+
+---
+
+## 🏗️ **PHASE 1: Project Foundation & Setup**
+
+### Frontend Setup ✅
+- [x] Initialize Vite + React + TypeScript project
+- [x] Install and configure Tailwind CSS
+- [x] Set up React Router DOM for navigation
+- [x] Install UI libraries (Radix UI, Lucide React)
+- [x] Install form handling (React Hook Form + Zod)
+- [x] Install state management (React Query)
+- [x] Configure PostCSS and build tools
+- [x] Set up ESLint and TypeScript configuration
+
+### Backend Setup ✅
+- [x] Set up Supabase project and database
+- [x] Configure environment variables (.env files)
+- [x] Create database schema and tables
+- [x] Set up Supabase client configuration
+- [x] Initialize authentication system
+
+### DevOps Setup
+- [ ] Configure deployment targets:
+  - [ ] Deploy your frontend (Vite + React) to Vercel
+  - [ ] Deploy your backend (Express API) to Render
+  - [ ] Set up CI/CD pipelines
+- [ ] Configure environment variables for production
+- [ ] Set up monitoring and logging
+
+---
+
+## 🔐 **PHASE 2: Authentication & User Management**
+
+### Frontend Auth Components ✅
+- [x] Create AuthWrapper component for protected routes
+- [x] Build login UI with email input
+- [x] Create auth callback handler
+- [x] Build settings page for password management
+- [x] Implement DevModeToggle for development
+- [x] Create protected route wrapper
+- [x] Add password reset functionality
+
+### Backend Auth Services ✅
+- [x] Configure Supabase auth with magic links
+- [x] Set up dev bypass authentication
+- [x] Create user session management
+- [x] Implement auth middleware
+- [x] Set up user profile storage
+
+### Auth Flow Integration
+- [ ] Implement proper error handling for auth failures
+- [ ] Add loading states during authentication
+- [ ] Create user logout functionality
+- [ ] Add session persistence across browser sessions
+
+---
+
+## 👤 **PHASE 3: User Onboarding & Preferences**
+
+### Frontend Onboarding UI ✅
+- [x] Create Onboarding component with multi-step form
+- [x] Build preference selection components:
+  - [x] Dietary preferences (multi-select)
+  - [x] Food allergies (multi-select)
+  - [x] Household size (interactive counter)
+  - [x] Cooking skill level (single select)
+  - [x] Cuisine preferences (multi-select)
+- [x] Add form validation with Zod schemas
+- [x] Implement progress indicators
+- [x] Add skip options for optional fields
+
+### Backend User Data Management ✅
+- [x] Create user preferences database schema
+- [x] Implement preference storage API
+- [x] Set up user profile data structure
+- [x] Create preference retrieval endpoints
+
+### Onboarding Integration
+- [ ] Pre-fill values on profile/settings page
+- [ ] Add preference editing functionality
+- [ ] Implement preference validation rules
+- [ ] Create preference update notifications
+
+---
+
+## 🤖 **PHASE 4: AI Integration & Meal Planning**
+
+### Frontend AI Interface
+- [ ] Create AI model selector component
+- [ ] Build meal plan generation UI:
+  - [ ] Plan duration selector (3-day, weekly)
+  - [ ] Meal type filters (breakfast, lunch, dinner)
+  - [ ] Regeneration controls
+  - [ ] Loading states and progress indicators
+- [ ] Implement meal plan display components:
+  - [ ] MealCard component for individual meals
+  - [ ] Plan overview with meal summaries
+  - [ ] Recipe detail modals/pages
+- [ ] Add AI provider status indicators
+- [ ] Create error handling for AI failures
+
+### Backend AI Services
+- [ ] Set up AI provider abstraction layer:
+  - [ ] Create AIProvider interface
+  - [ ] Implement OpenAIProvider
+  - [ ] Implement MistralProvider (local/cloud)
+  - [ ] Add provider factory pattern
+- [ ] Build meal plan generation API:
+  - [ ] Create prompt engineering system
+  - [ ] Implement user preference integration
+  - [ ] Add response parsing and validation
+  - [ ] Set up rate limiting and error handling
+- [ ] Configure AI model parameters:
+  - [ ] Temperature and creativity controls
+  - [ ] Token limits and response formatting
+  - [ ] Cultural context integration
+
+### AI Configuration & Testing
+- [ ] Set up OpenAI integration:
+  - [ ] Configure API keys and endpoints
+  - [ ] Test connectivity and rate limits
+  - [ ] Implement retry logic
+- [ ] Set up local AI (Mistral):
+  - [ ] Install transformers library
+  - [ ] Configure HuggingFace integration
+  - [ ] Set up model caching
+- [ ] Create AI testing suite:
+  - [ ] Unit tests for providers
+  - [ ] Integration tests for meal generation
+  - [ ] Performance benchmarking
+  - [ ] Quality assessment metrics
+
+---
+
+## 🛒 **PHASE 5: Grocery List & Shopping**
+
+### Frontend Grocery Interface
+- [ ] Create GroceryListSection component
+- [ ] Build grocery list display:
+  - [ ] Category grouping (Produce, Protein, etc.)
+  - [ ] Item quantities and measurements
+  - [ ] Meal association labels
+  - [ ] Check-off functionality
+- [ ] Implement grocery list management:
+  - [ ] Add/remove items manually
+  - [ ] Quantity adjustments
+  - [ ] Category organization
+- [ ] Add export/sharing features:
+  - [ ] PDF generation
+  - [ ] Text copy functionality
+  - [ ] Shopping list sharing
+
+### Backend Grocery Services
+- [ ] Create grocery list generation API:
+  - [ ] Parse meal plan ingredients
+  - [ ] Aggregate quantities by item
+  - [ ] Categorize items automatically
+  - [ ] Handle unit conversions
+- [ ] Implement grocery list storage:
+  - [ ] Database schema for grocery lists
+  - [ ] CRUD operations for list management
+  - [ ] User-specific list persistence
+- [ ] Add ingredient database:
+  - [ ] Standard ingredient catalog
+  - [ ] Category mappings
+  - [ ] Unit conversion rules
+
+---
+
+## 🎨 **PHASE 6: UI/UX Polish & Responsiveness**
+
+### Frontend Design System
+- [ ] Implement consistent design tokens:
+  - [ ] Color palette and theming
+  - [ ] Typography scale
+  - [ ] Spacing and layout rules
+  - [ ] Component variants
+- [ ] Create reusable UI components:
+  - [ ] Button variants and states
+  - [ ] Form input components
+  - [ ] Modal and dialog components
+  - [ ] Loading and skeleton components
+- [ ] Add micro-interactions:
+  - [ ] Framer Motion animations
+  - [ ] Hover and focus states
+  - [ ] Transition effects
+  - [ ] Loading animations
+
+### Mobile Responsiveness
+- [ ] Implement responsive navigation:
+  - [ ] Mobile hamburger menu
+  - [ ] Bottom navigation for mobile
+  - [ ] Touch-friendly interactions
+- [ ] Optimize forms for mobile:
+  - [ ] Touch-friendly input sizes
+  - [ ] Mobile keyboard optimization
+  - [ ] Swipe gestures where appropriate
+- [ ] Ensure cross-device compatibility:
+  - [ ] Tablet layouts
+  - [ ] Different screen sizes
+  - [ ] Orientation handling
+
+### Performance Optimization
+- [ ] Implement code splitting:
+  - [ ] Route-based splitting
+  - [ ] Component lazy loading
+  - [ ] Bundle size optimization
+- [ ] Add caching strategies:
+  - [ ] React Query caching
+  - [ ] Static asset caching
+  - [ ] API response caching
+- [ ] Optimize images and assets:
+  - [ ] Image compression
+  - [ ] Lazy loading
+  - [ ] WebP format support
+
+---
+
+## 📊 **PHASE 7: Feedback & Analytics**
+
+### Frontend Feedback System
+- [ ] Create recipe feedback components:
+  - [ ] Thumbs up/down buttons
+  - [ ] Rating system (1-5 stars)
+  - [ ] Comment input field
+  - [ ] Feedback submission UI
+- [ ] Build feedback collection:
+  - [ ] Inline feedback on meal cards
+  - [ ] Post-meal feedback prompts
+  - [ ] User satisfaction surveys
+- [ ] Implement feedback display:
+  - [ ] Show user's previous feedback
+  - [ ] Community ratings display
+  - [ ] Feedback history
+
+### Backend Feedback Services
+- [ ] Create feedback database schema:
+  - [ ] User feedback storage
+  - [ ] Recipe ratings aggregation
+  - [ ] Feedback analytics data
+- [ ] Implement feedback API:
+  - [ ] Submit feedback endpoint
+  - [ ] Retrieve feedback endpoint
+  - [ ] Feedback analytics endpoint
+- [ ] Add feedback processing:
+  - [ ] Rating calculations
+  - [ ] Feedback categorization
+  - [ ] Sentiment analysis
+
+### Analytics Integration
+- [ ] Set up user analytics:
+  - [ ] Page view tracking
+  - [ ] User interaction events
+  - [ ] Conversion funnel tracking
+- [ ] Implement performance monitoring:
+  - [ ] Error tracking
+  - [ ] Performance metrics
+  - [ ] User experience monitoring
+- [ ] Add business metrics:
+  - [ ] User engagement tracking
+  - [ ] Feature usage analytics
+  - [ ] Retention metrics
+
+---
+
+## 💳 **PHASE 8: Subscription & Monetization**
+
+### Frontend Subscription UI
+- [ ] Create pricing page:
+  - [ ] Feature comparison table
+  - [ ] Pricing tiers display
+  - [ ] Subscription benefits
+- [ ] Build subscription management:
+  - [ ] Plan selection interface
+  - [ ] Payment method setup
+  - [ ] Billing history display
+- [ ] Implement upgrade prompts:
+  - [ ] Feature limitation notices
+  - [ ] Upgrade call-to-action buttons
+  - [ ] Trial period indicators
+
+### Backend Subscription Services
+- [ ] Integrate payment processor:
+  - [ ] Stripe setup
+  - [ ] Payment webhook handling
+  - [ ] Subscription management
+- [ ] Create subscription API:
+  - [ ] Plan creation and management
+  - [ ] User subscription status
+  - [ ] Billing cycle handling
+- [ ] Implement access control:
+  - [ ] Feature gating based on plan
+  - [ ] Usage limits enforcement
+  - [ ] Plan upgrade/downgrade logic
+
+### Subscription Features
+- [ ] Define plan tiers:
+  - [ ] Free tier (1 plan per IP address)
+  - [ ] Basic tier (weekly plans)
+- [ ] Implement feature gating:
+  - [ ] Plan generation limits
+  - [ ] Advanced features access
+- [ ] Add trial and onboarding:
+  - [ ] Free trial period
+  - [ ] Trial-to-paid conversion
+  - [ ] Cancellation handling
+
+---
+
+## 🚀 **PHASE 9: Deployment & Production**
+
+### Frontend Deployment
+- [ ] Configure production build:
+  - [ ] Environment-specific builds
+  - [ ] Asset optimization
+  - [ ] Bundle analysis
+- [ ] Set up Vercel deployment:
+  - [ ] Domain configuration
+  - [ ] Environment variables
+  - [ ] Build optimization
+- [ ] Implement monitoring:
+  - [ ] Error tracking (Sentry)
+  - [ ] Performance monitoring
+  - [ ] User analytics
+
+### Backend Deployment
+- [ ] Set up serverless functions:
+  - [ ] API route deployment
+  - [ ] Database connection pooling
+  - [ ] Environment configuration
+- [ ] Configure database:
+  - [ ] Production database setup
+  - [ ] Backup and recovery
+  - [ ] Performance optimization
+- [ ] Implement security:
+  - [ ] API rate limiting
+  - [ ] CORS configuration
+  - [ ] Security headers
+
+### Testing & Quality Assurance
+- [ ] End-to-end testing:
+  - [ ] User journey testing
+  - [ ] Cross-browser compatibility
+  - [ ] Mobile device testing
+- [ ] Performance testing:
+  - [ ] Load testing
+  - [ ] Stress testing
+  - [ ] Performance benchmarking
+- [ ] Security testing:
+  - [ ] Vulnerability scanning
+  - [ ] Penetration testing
+  - [ ] Data protection validation
+
+---
+
+## 🎯 **PHASE 10: Launch & Growth**
+
+### Pre-Launch Checklist
+- [ ] Content and copy:
+  - [ ] Landing page copy
+  - [ ] App store descriptions
+  - [ ] Marketing materials
+- [ ] SEO optimization:
+  - [ ] Meta tags and OG tags
+  - [ ] Sitemap generation
+  - [ ] Schema markup
+- [ ] Legal compliance:
+  - [ ] Privacy policy
+  - [ ] Terms of service
+  - [ ] Cookie consent
+
+### Launch Preparation
+- [ ] Beta testing:
+  - [ ] User acceptance testing
+  - [ ] Feedback collection
+  - [ ] Bug fixes and improvements
+- [ ] Marketing setup:
+  - [ ] Social media accounts
+  - [ ] Email marketing setup
+  - [ ] Analytics tracking
+- [ ] Support system:
+  - [ ] Help documentation
+  - [ ] Contact forms
+  - [ ] FAQ section
+
+### Post-Launch Monitoring
+- [ ] User feedback collection:
+  - [ ] In-app feedback system
+  - [ ] User interviews
+  - [ ] Usage analytics
+- [ ] Performance monitoring:
+  - [ ] System health checks
+  - [ ] Error rate monitoring
+  - [ ] Response time tracking
+- [ ] Growth metrics:
+  - [ ] User acquisition
+  - [ ] Retention rates
+  - [ ] Feature adoption
+
+---
+
+## 📝 **Development Notes**
+
+### Current Status
+- ✅ **Completed**: Project setup, authentication, onboarding
+- 🔄 **In Progress**: AI integration and meal planning
+- ⏳ **Pending**: Grocery lists, UI polish, subscription system
+
+### Technical Decisions
+- **Frontend**: React + TypeScript + Vite + Tailwind CSS
+- **Backend**: Supabase (Auth, Database, Functions)
+- **AI**: OpenAI + Mistral (local/cloud options)
+- **Deployment**: Vercel (frontend) + Render (backend)
+
+### Development Guidelines
+- Follow TypeScript best practices with strict typing
+- Use React Query for server state management
+- Implement proper error boundaries and loading states
+- Ensure mobile-first responsive design
+- Maintain consistent naming conventions
+- Write comprehensive tests for critical paths
+
+---
+
+> **Cursor**: This roadmap serves as the development source of truth. Update progress as tasks are completed and break down complex items into subtasks when needed.
