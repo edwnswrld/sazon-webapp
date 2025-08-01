@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { createClient } from '@supabase/supabase-js'
-import { sazonBackendConfig } from '../config/index.js'
-import { SazonLogger } from '../utils/logger.js'
+import { sazonBackendConfig } from '../config/index'
+import { SazonLogger } from '../utils/logger'
 
 // Create Supabase client with service role key for backend operations
 const supabaseAdminClient = createClient(

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useSazonUser } from '../context/UserContext'
 import SazonBottomNavbar from '../components/BottomNavbar'
-import SazonMealCard from '../components/MealCard'
+
 import { 
   Plus, 
   Calendar, 
@@ -13,7 +13,7 @@ import {
   ArrowRight,
   Sparkles
 } from 'lucide-react'
-import { SazonMeal, SazonMealPlanResponse } from '../lib/api'
+import { SazonMealPlanResponse } from '../lib/api'
 
 const SazonDashboardPage: React.FC = () => {
   const { profile } = useSazonUser()

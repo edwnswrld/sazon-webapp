@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+
 import { useSazonUser } from '../context/UserContext'
 import { validatePassword } from '../lib/auth'
 import { User, Lock, Eye, EyeOff, CheckCircle, XCircle, ChefHat, Users, Utensils, Globe } from 'lucide-react'
 import SazonBottomNavbar from '../components/BottomNavbar'
 
 const SazonSettings: React.FC = () => {
-  const { user, profile, updateProfile, updatePassword } = useSazonUser()
-  const navigate = useNavigate()
+  const { user, profile, updatePassword } = useSazonUser()
+
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
@@ -86,10 +86,7 @@ const SazonSettings: React.FC = () => {
     }
   }
 
-  const clearMessages = () => {
-    setError('')
-    setSuccess('')
-  }
+
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">

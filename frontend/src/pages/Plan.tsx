@@ -14,7 +14,7 @@ import {
   ArrowLeft,
   Save,
   RefreshCw,
-  CheckCircle
+
 } from 'lucide-react'
 
 const SazonPlanPage: React.FC = () => {
@@ -196,7 +196,7 @@ const SazonPlanPage: React.FC = () => {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Meals</h2>
               <div className="space-y-6">
-                {mealPlan.meals.map((meal, index) => (
+                {mealPlan.meals.map((meal) => (
                   <SazonMealCard
                     key={meal.id}
                     meal={meal}
@@ -212,10 +212,9 @@ const SazonPlanPage: React.FC = () => {
 
             {/* Grocery List */}
             <div id="grocery-list">
-              <SazonGroceryListSection
-                groceryItems={mealPlan.grocery_list}
-                showCosts={true}
-              />
+                              <SazonGroceryListSection
+                  groceryItems={mealPlan.grocery_list}
+                />
             </div>
           </div>
         </div>

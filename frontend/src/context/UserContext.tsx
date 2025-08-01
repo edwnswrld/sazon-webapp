@@ -66,7 +66,7 @@ export const UserContextProvider: React.FC<SazonUserContextProviderProps> = ({ c
 
     // Listen for auth changes
     const { data: { subscription } } = supabaseClient.auth.onAuthStateChange(
-      async (event, session) => {
+      async (_event, session) => {
         setUser(session?.user ?? null)
         
         if (session?.user) {
@@ -159,8 +159,10 @@ export const UserContextProvider: React.FC<SazonUserContextProviderProps> = ({ c
     // In dev mode, just update local state
     if (isDevModeEnabled()) {
       const currentProfile = getDevProfile()
-      const updatedProfile = { ...currentProfile, ...updates, updated_at: new Date().toISOString() }
-      setProfile(updatedProfile)
+      if (currentProfile) {
+        const updatedProfile = { ...currentProfile, ...updates, updated_at: new Date().toISOString() }
+        setProfile(updatedProfile)
+      }
       return { error: null }
     }
 
@@ -172,7 +174,7 @@ export const UserContextProvider: React.FC<SazonUserContextProviderProps> = ({ c
       .single()
 
     if (!error && data) {
-      setProfile(data)
+      setProfile(data as SazonUserProfile)
     }
 
     return { error }

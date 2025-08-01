@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useSazonUser } from '../context/UserContext'
 import { validateEmail, validatePassword } from '../lib/auth'
-import { ChefHat, Sparkles, Clock, Users, Mail, Lock, User, LogIn } from 'lucide-react'
+import { ChefHat, Sparkles, Clock, Users, Mail, User, LogIn } from 'lucide-react'
 
 const SazonHomePage: React.FC = () => {
-  const { signIn, signUp, signInWithMagicLink, signUpWithMagicLink } = useSazonUser()
+  const { signIn, signUp, signInWithMagicLink } = useSazonUser()
   const navigate = useNavigate()
   const [isSignUp, setIsSignUp] = useState(false)
   const [isLoading, setIsLoading] = useState(false)

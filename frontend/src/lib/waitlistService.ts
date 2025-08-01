@@ -1,4 +1,4 @@
-import { supabase } from './supabaseClient';
+import { supabaseClient as supabase } from './supabaseClient';
 
 // Waitlist service for handling email signups with Supabase integration
 

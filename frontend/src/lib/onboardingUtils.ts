@@ -31,11 +31,11 @@ export const hasCompletedOnboarding = (profile: SazonUserProfile | null): boolea
 
   // Check if user has set up their dietary preferences and other key onboarding fields
   return !!(
-    profile.dietary_preferences?.length > 0 ||
-    profile.allergies?.length > 0 ||
+    profile.dietary_preferences && profile.dietary_preferences.length > 0 ||
+    profile.allergies && profile.allergies.length > 0 ||
     profile.household_size ||
     profile.cooking_skill_level ||
-    profile.cuisine_preferences?.length > 0
+    profile.cuisine_preferences && profile.cuisine_preferences.length > 0
   )
 }
 

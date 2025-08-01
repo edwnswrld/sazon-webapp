@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { useSazonUser } from '../context/UserContext'
 import AuthWrapper from '../components/AuthWrapper'
 import AppLayout from '../components/AppLayout'
-import Home from '../pages/Home'
+
 import Onboarding from '../pages/Onboarding'
 import Dashboard from '../pages/Dashboard'
 import Plan from '../pages/Plan'

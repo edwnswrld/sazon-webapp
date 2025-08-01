@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { sazonAuthMiddleware, sazonOptionalAuthMiddleware } from '../auth.js'
+import { sazonAuthMiddleware, sazonOptionalAuthMiddleware } from '../auth'
 
 // Mock Supabase client
 jest.mock('@supabase/supabase-js', () => ({
@@ -11,7 +11,7 @@ jest.mock('@supabase/supabase-js', () => ({
 }))
 
 // Mock logger
-jest.mock('../../utils/logger.js', () => ({
+jest.mock('../../utils/logger', () => ({
   SazonLogger: {
     info: jest.fn(),
     warn: jest.fn(),

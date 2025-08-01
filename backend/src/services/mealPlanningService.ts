@@ -6,8 +6,8 @@ import {
   SazonGroceryItem,
   SazonGptRequest,
   SazonGptResponse
-} from '../types/index.js'
-import { sazonBackendConfig } from '../config/index.js'
+} from '../types/index'
+import { sazonBackendConfig } from '../config/index'
 
 /**
  * Service class for handling meal planning operations

@@ -14,7 +14,7 @@ export const createMockUser = (): User => ({
   aud: 'authenticated',
   role: 'authenticated',
   email_confirmed_at: new Date().toISOString(),
-  phone: null,
+  phone: undefined,
   confirmed_at: new Date().toISOString(),
   last_sign_in_at: new Date().toISOString(),
   app_metadata: {

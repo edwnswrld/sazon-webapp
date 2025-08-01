@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'
-import { SazonBackendConfig } from '../types/index.js'
+import { SazonBackendConfig } from '../types/index'
 
 // Load environment variables
 dotenv.config()
