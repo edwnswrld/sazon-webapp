@@ -1,23 +1,55 @@
 import React, { useState } from 'react';
+import { sazonWaitlistService } from '../../lib/waitlistService';
 
-interface WaitlistSectionProps {
-  onSignup: (email: string) => void;
+interface SazonWaitlistSectionProps {
+  onSignup?: (email: string) => void;
 }
 
-export const WaitlistSection: React.FC<WaitlistSectionProps> = ({ onSignup }) => {
+export const SazonWaitlistSection: React.FC<SazonWaitlistSectionProps> = ({ onSignup }) => {
   const [email, setEmail] = useState('');
+  const [fullName, setFullName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
 
     setIsSubmitting(true);
+    setMessage(null);
+
     try {
-      await onSignup(email);
+      // Use the new Supabase-based service with automatic UTM tracking
+      await sazonWaitlistService.signupWithTracking(email, {
+        full_name: fullName || undefined,
+        source: 'landing_page',
+        preferences: {
+          dietaryRestrictions: [],
+          cuisinePreferences: [],
+          cookingLevel: 'beginner'
+        }
+      });
+
+      setMessage({ type: 'success', text: 'Successfully joined the waitlist! We\'ll be in touch soon.' });
       setEmail('');
+      setFullName('');
+      
+      // Call the optional callback
+      if (onSignup) {
+        onSignup(email);
+      }
     } catch (error) {
-      console.error('Signup error:', error);
+      console.error('Waitlist signup error:', error);
+      
+      if (error instanceof Error) {
+        if (error.message.includes('already signed up')) {
+          setMessage({ type: 'error', text: 'This email is already on our waitlist!' });
+        } else {
+          setMessage({ type: 'error', text: 'Something went wrong. Please try again.' });
+        }
+      } else {
+        setMessage({ type: 'error', text: 'Something went wrong. Please try again.' });
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -48,24 +80,48 @@ export const WaitlistSection: React.FC<WaitlistSectionProps> = ({ onSignup }) =>
         {/* Signup Form */}
         <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 mb-12">
           <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="space-y-4">
+              {/* Full Name Field */}
+              <input
+                type="text"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                placeholder="Your name (optional)"
+                className="w-full px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-300"
+              />
+              
+              {/* Email Field */}
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email address"
                 required
-                className="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-300"
+                className="w-full px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-300"
               />
+              
+              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="bg-white text-orange-600 px-8 py-3 rounded-lg font-semibold hover:bg-orange-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-white text-orange-600 px-8 py-3 rounded-lg font-semibold hover:bg-orange-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Joining...' : 'Join Waitlist'}
               </button>
             </div>
           </form>
+          
+          {/* Message Display */}
+          {message && (
+            <div className={`mt-4 p-3 rounded-lg ${
+              message.type === 'success' 
+                ? 'bg-green-500/20 text-green-100 border border-green-400/30' 
+                : 'bg-red-500/20 text-red-100 border border-red-400/30'
+            }`}>
+              {message.text}
+            </div>
+          )}
+          
           <p className="text-sm text-orange-100 mt-3">
             No spam, ever. Unsubscribe anytime.
           </p>
@@ -108,4 +164,7 @@ export const WaitlistSection: React.FC<WaitlistSectionProps> = ({ onSignup }) =>
       </div>
     </section>
   );
-}; 
+};
+
+// Legacy export for backward compatibility
+export const WaitlistSection = SazonWaitlistSection; 
