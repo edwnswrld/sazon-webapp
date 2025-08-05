@@ -2,6 +2,75 @@
 
 Sazon AI is a mobile-first web application that uses artificial intelligence to create personalized meal plans based on your dietary preferences and cooking skills. Say goodbye to meal planning stress and hello to delicious, customized recipes!
 
+## 🌐 Live URLs
+
+### Current Status: Development/Pre-Deployment
+
+**The app is currently in development and not yet deployed to production.**
+
+#### Local Development URLs:
+- **Frontend (Web App)**: `http://localhost:3000` or `http://localhost:5173`
+- **Backend API**: `http://localhost:3001`
+- **Landing Page**: `http://localhost:3000` (same as frontend)
+
+#### Planned Production URLs:
+- **Frontend (Web App)**: `https://sazon-ai.vercel.app` (planned)
+- **Backend API**: `https://sazon-backend.onrender.com` (planned)
+- **Landing Page**: `https://sazon-ai.vercel.app` (same as frontend)
+
+### 🚀 Deployment Instructions
+
+To deploy the app and get live URLs:
+
+1. **Deploy Frontend to Vercel**:
+   ```bash
+   # Install Vercel CLI
+   npm i -g vercel
+   
+   # Deploy from project root
+   vercel --prod
+   ```
+
+2. **Deploy Backend to Render**:
+   - Create a new Web Service on Render
+   - Connect your GitHub repository
+   - Set build command: `npm run build:backend`
+   - Set start command: `npm start`
+   - Configure environment variables
+
+3. **Update Environment Variables**:
+   - Set production URLs in Vercel and Render dashboards
+   - Update CORS origins and API base URLs
+
+4. **Update this README** with the actual production URLs once deployed.
+
+### 📱 App Features
+
+- **Landing Page**: Beautiful marketing page with waitlist signup
+- **Web App**: Full meal planning application with AI-powered recommendations
+- **Mobile-First**: Optimized for mobile devices
+- **Authentication**: Secure sign-up and sign-in with Supabase
+
+### 🎯 Landing Page Details
+
+The landing page (`/` or `/landing`) includes:
+
+- **Hero Section**: Compelling value proposition with interactive app preview
+- **Features Section**: 6 key differentiators with hover effects
+- **Mock Designs Section**: Interactive product previews in phone frame
+- **Waitlist Section**: Email capture with benefits and social proof
+- **Social Proof Section**: Testimonials and community features
+- **Footer**: Complete with links and branding
+
+**Landing Page Components**:
+- `frontend/src/pages/landing/LandingPage.tsx` - Main landing page
+- `frontend/src/components/landing/` - All landing page components
+- `frontend/src/lib/waitlistService.ts` - Waitlist management
+
+**Access the Landing Page**:
+- **Local**: `http://localhost:3000` or `http://localhost:3000/landing`
+- **Production**: Will be available at the same URL as the main app
+
 ## 🚀 Features
 
 - **AI-Powered Meal Planning**: Generate personalized meal plans using GPT-4

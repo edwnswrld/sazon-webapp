@@ -2,6 +2,30 @@
 
 A full-stack meal planning application with AI-powered recipe recommendations.
 
+## 🌐 Live URLs
+
+### Current Status: Development/Pre-Deployment
+
+**The app is currently in development and not yet deployed to production.**
+
+#### Local Development URLs:
+- **Frontend (Web App)**: `http://localhost:3000` or `http://localhost:5173`
+- **Backend API**: `http://localhost:3001`
+- **Landing Page**: `http://localhost:3000` (same as frontend)
+
+#### Planned Production URLs:
+- **Frontend (Web App)**: `https://sazon-ai.vercel.app` (planned)
+- **Backend API**: `https://sazon-backend.onrender.com` (planned)
+- **Landing Page**: `https://sazon-ai.vercel.app` (same as frontend)
+
+### 🚀 Quick Deployment
+
+To get the app live:
+
+1. **Deploy Frontend**: `vercel --prod` (from project root)
+2. **Deploy Backend**: Create Render Web Service
+3. **Update URLs** in this README once deployed
+
 ## Project Structure
 
 This project is organized into three main directories:
